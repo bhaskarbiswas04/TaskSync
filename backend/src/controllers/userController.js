@@ -1,59 +1,107 @@
 import { User } from "../models/User.model.js";
-import bcrypt from "bcryptjs"
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-export const signup = async (req, res)=>{
+//---Register / Signup User
+export const signup = async (req, res) => {
+  try {
+    const { name, email, password, confirmPassword } = req.body;
 
-    try {
-      const { name, email, password, confirmPassword } = req.body;
+    //--Validations
+    if (!name || !email || !password || !confirmPassword) {
+      res.status(400).json({ message: "All fields are required." });
+    }
 
-      //--Validations
-      if (!name || !email || !password || !confirmPassword) {
-        res.status(400).json({ message: "All fields are required." });
-      }
+    //-Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        message: "Invalid email format",
+      });
+    }
 
-      //-Email validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        return res.status(400).json({
-          message: "Invalid email format",
-        });
-      }
+    //-check password
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match." });
+    }
 
-      //-check password
-      if (password !== confirmPassword) {
-        return res.status(400).json({ message: "Passwords do not match." });
-      }
+    //-check existing user
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      res
+        .status(400)
+        .json({ message: "User Already Exists. Try another email." });
+    }
 
-      //-check existing user
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-        res
-          .status(400)
-          .json({ message: "User Already Exists. Try another email." });
-      }
+    //-hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-      //-hash password
-      const hashedPassword = await bcrypt.hash(password, 10);
+    //-create new User
+    await User.create({
+      name,
+      email,
+      password: hashedPassword,
+    });
 
-      //-create new User
-      await User.create({
+    return res.status(201).json({
+      message: "User registered successfully",
+      user: {
         name,
         email,
-        password: hashedPassword,
-      });
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
+};
 
-      res.status(201).json({
-        message: "User registered successfully",
-        user: {
-          _id: User._id,
-          name: User.name,
-          email: User.email,
-        },
+//---Login User
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    //--Validations
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "Email and password are required",
       });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-          message: "Server error",
-        });
     }
-}
+
+    //-check user
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    //-compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({ message: "Incorrect Password" });
+    }
+
+    const tokenData = { userId: user._id };
+    const token = jwt.sign(tokenData, process.env.JWT_SECRET_KEY, {
+      expiresIn: "7d",
+    });
+
+    return res.status(200).json({
+      message: "Logged In Successfull",
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
+};
