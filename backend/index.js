@@ -15,7 +15,7 @@ app.use(express.json());
 
 //Testing route
 app.get("/", (req, res)=>{
-    res.send("API is running smoothly...");
+    res.send("API is running smoothly for TaskSync");
 });
 
 const PORT = process.env.PORT || 3000;
