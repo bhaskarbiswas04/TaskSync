@@ -43,10 +43,6 @@ const taskSchema = new mongoose.Schema(
       default: "Medium",
     },
 
-    dueDate: {
-      type: Date,
-    },
-
     timeToComplete: {
       type: Number,
     },
