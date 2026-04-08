@@ -111,3 +111,31 @@ export const updateTaskById = async (req, res)=>{
         });
     }
 }
+
+//--RouteLogic: DELETE Task
+export const deleteTask = async (req, res)=>{
+    try {
+        const task = await Task.findById(req.params.id);
+
+        if (!task) {
+          return res.status(404).json({ message: "Task not found" });
+        }
+
+        //-only creator of the task can DELETE
+        if (task.createdBy.toString() !== req.user._id.toString()) {
+          return res.status(403).json({
+            message: "Not authorized to delete this task",
+          });
+        }
+
+        await task.deleteOne();
+
+        return res.json({
+          message: "Task deleted",
+        });
+    } catch (error) {
+        res.status(500).json({
+          message: "Error deleting task",
+        });
+    }
+}
