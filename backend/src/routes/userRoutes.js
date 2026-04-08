@@ -1,17 +1,11 @@
 import express from "express";
-import { signup, login } from "../controllers/userController.js";
+import { signup, login, getLogInUser } from "../controllers/userController.js";
 import isAuthenticated from "../middleware/isAuthenticated.js";
 
 const router = express.Router();
 
-router.post("/signup", signup);
-router.post("/login", login);
-
-router.get("/me", isAuthenticated, (req, res) => {
-  res.json({
-    message: "Access granted.",
-    user: req.user,
-  });
-});
+router.route("/signup").post(signup);
+router.route("/login").post(login);
+router.route("/me").get(isAuthenticated, getLogInUser);
 
 export default router;
