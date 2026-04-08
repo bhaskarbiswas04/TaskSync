@@ -78,7 +78,7 @@ export const getTasks = async (req, res)=>{
     }
 }
 
-//--RouteLogic: PUT- Update a Task
+//--RouteLogic: POST- Update a Task
 export const updateTaskById = async (req, res)=>{
     try {
         const task = await Task.findById(req.params.id);
