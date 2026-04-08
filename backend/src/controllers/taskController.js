@@ -121,7 +121,7 @@ export const deleteTask = async (req, res)=>{
           return res.status(404).json({ message: "Task not found" });
         }
 
-        //-only creator of the task can DELETE
+        //-only creator of the task is allowd to delete
         if (task.createdBy.toString() !== req.user._id.toString()) {
           return res.status(403).json({
             message: "Not authorized to delete this task",
