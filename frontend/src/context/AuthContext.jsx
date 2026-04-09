@@ -12,16 +12,16 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("token");
 
     if (token) {
-    //   API_BASE_URL.get("/auth/me")
-    //     .then((res) => {
-    //       setUser(res.data.user);
-    //     })
-    //     .catch(() => {
-    //       localStorage.removeItem("token");
-    //     })
-    //     .finally(() => setLoading(false));
-
-    setLoading(false)
+      API_BASE_URL.get("/auth/me")
+        .then((res) => {
+          setUser(res.data.user);
+        })
+        .catch((err) => {
+          console.log("AUTO LOGIN ERROR:", err);
+          localStorage.removeItem("token");
+          setUser(null);
+        })
+        .finally(() => setLoading(false));
     } else {
       setLoading(false);
     }

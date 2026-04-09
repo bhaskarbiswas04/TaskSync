@@ -31,7 +31,7 @@ export default function Login() {
 
       await login(form);
 
-      toast.success("Welcome back 🚀");
+      toast.success("Welcome Back");
 
       navigate("/dashboard");
     } catch (err) {
@@ -42,7 +42,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-900 via-gray-800 to-gray-900">
       <form
         onSubmit={handleSubmit}
         className="bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-2xl w-96 space-y-5 shadow-xl"
