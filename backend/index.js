@@ -15,9 +15,7 @@ const app = express();
 
 const corsOptions = {
   origin: ["http://localhost:5173", "https://task-sync-client.vercel.app"],
-  methods: ["GET", "POST", "DELETE"],
   credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 // Middleware

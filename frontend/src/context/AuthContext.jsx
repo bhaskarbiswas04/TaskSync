@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import API_BASE_URL from "../api/axios";
+import axios from "axios";
 
 const AuthContext =  createContext();
 
@@ -35,6 +36,7 @@ export const AuthProvider = ({ children }) => {
 
   //login
   const login = async (formData) => {
+    axios.defaults.withCredentials = true;
     const res = await API_BASE_URL.post("/auth/login", formData);
 
     console.log("LOGIN SUCCESS:", res.data);
