@@ -1,14 +1,31 @@
-import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import './App.css'
+import ProtectedRoute from "./routes/ProtectedRoute";
+import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage";
 
-function App() {
-
-  return (
-    <>
-    <h1>TaskSync</h1>
-    </>
-  )
+function Dashboard() {
+  return <h1>Dashboard</h1>;
 }
 
-export default App
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<h1>Landing Page</h1>} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
