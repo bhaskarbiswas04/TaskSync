@@ -116,3 +116,22 @@ export const getLogInUser = async (req, res)=>{
         });
     }
 }
+
+//--RouteLogic: GET- all users (including the logged-in user)
+export const getAllUsers = async (req, res) => {
+  try {
+    // Find all users but only return name, email, and _id
+    // We exclude 'password' for security
+    const users = await User.find({}).select("name email");
+
+    res.status(200).json({
+      count: users.length,
+      users,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Server error while fetching users",
+    });
+  }
+};
