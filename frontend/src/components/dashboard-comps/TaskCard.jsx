@@ -1,6 +1,7 @@
 export default function TaskCard({ task }) {
   return (
     <div className="bg-white/5 backdrop-blur-lg border border-white/10 p-5 rounded-xl hover:scale-[1.02] transition shadow-lg">
+      <div className="flex justify-between">
       <span
         className={`text-xs px-2 py-1 rounded ${
           task.status === "Completed"
@@ -10,6 +11,18 @@ export default function TaskCard({ task }) {
       >
         {task.status}
       </span>
+
+      <span
+        className={`text-xs px-2 py-1 rounded ${
+          task.status === "High"
+            ? "bg-red-500/20 text-white"
+            : "bg-cyan-500/20 text-cyan-400"
+        }`}
+      >
+        {task.priority}
+      </span>
+
+      </div>
 
       <h3 className="text-md font-semibold mt-2">{task.name}</h3>
 

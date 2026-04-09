@@ -4,7 +4,8 @@ import ProjectCard from "../components/dashboard-comps/ProjectCard";
 import TaskCard from "../components/dashboard-comps/TaskCard";
 import { getProjects } from "../api/projectsApi";
 import { getTasks } from "../api/tasksApi";
-import { getTeams } from "../api/teamApi"; // ✅ ADD THIS
+import { getTeams } from "../api/teamApi";
+import { getAllUsers } from "../api/UserApi";
 import toast from "react-hot-toast";
 
 import CreateProjectModal from "../components/CreateProjectModal";
@@ -13,7 +14,8 @@ import CreateTaskModal from "../components/CreateTaskModal";
 export default function DashboardPage() {
   const [projects, setProjects] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const [teams, setTeams] = useState([]); // ✅ teams state
+  const [owners, setOwners] = useState([]);
+  const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [showProjectModal, setShowProjectModal] = useState(false);
@@ -22,15 +24,18 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [projectsData, tasksData, teamsData] = await Promise.all([
-          getProjects(),
-          getTasks(),
-          getTeams(),
-        ]);
+        const [projectsData, tasksData, teamsData, ownersData] =
+          await Promise.all([
+            getProjects(),
+            getTasks(),
+            getTeams(),
+            getAllUsers(),
+          ]);
 
         setProjects(projectsData);
         setTasks(tasksData);
         setTeams(teamsData);
+        setOwners(ownersData);
       } catch (error) {
         toast.error("Failed to load data");
         console.log(error);
@@ -52,7 +57,7 @@ export default function DashboardPage() {
 
   return (
     <DashboardLayout>
-      {/* 🔥 MODALS OUTSIDE FLEX (IMPORTANT) */}
+      {/* MODALS */}
       <CreateProjectModal
         isOpen={showProjectModal}
         onClose={() => setShowProjectModal(false)}
@@ -63,6 +68,9 @@ export default function DashboardPage() {
       <CreateTaskModal
         isOpen={showTaskModal}
         onClose={() => setShowTaskModal(false)}
+        teams={teams}
+        projects={projects}
+        owners={owners}
         onSuccess={(newTask) => setTasks((prev) => [newTask, ...prev])}
       />
 
