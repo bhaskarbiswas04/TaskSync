@@ -10,8 +10,11 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="w-64 bg-white/5 backdrop-blur-xl border-r border-white/10 hidden md:flex flex-col p-6">
-      <h1 className="text-2xl font-bold text-blue-400 mb-10">TaskSync</h1>
+    <div className="w-65 bg-white/5 backdrop-blur-xl border-r border-white/10 hidden md:flex flex-col p-6">
+      <h1 className="text-4xl font-bold text-indigo-400 mb-10">
+        TaskS
+        <span className="text-indigo-600">ync</span>
+      </h1>
 
       <nav className="space-y-2">
         {menuItems.map((item) => (
