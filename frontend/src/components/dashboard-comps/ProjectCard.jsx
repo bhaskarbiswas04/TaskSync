@@ -1,6 +1,6 @@
 export default function ProjectCard({ project }) {
   return (
-    <div className="bg-white/5 backdrop-blur-lg border border-white/10 p-5 rounded-xl hover:scale-[1.02] transition shadow-lg">
+    <div className="cursor-pointer bg-white/5 backdrop-blur-lg border border-white/10 p-5 rounded-xl hover:scale-[1.02] transition shadow-lg">
       {/* <span
         className={`text-xs px-2 py-1 rounded ${
           project.status === "Completed"

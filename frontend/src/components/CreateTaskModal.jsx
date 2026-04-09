@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Modal from "./Modal";
-import API from "../api/axios";
+import API_BASE_URL from "../api/axios";
 import toast from "react-hot-toast";
 
 export default function CreateTaskModal({
@@ -53,9 +53,9 @@ export default function CreateTaskModal({
         timeToComplete: Number(form.timeToComplete) || 0,
       };
 
-      const res = await API.post("/tasks", payload);
+      const res = await API_BASE_URL.post("/tasks", payload);
 
-      toast.success("Task Created 🚀");
+      toast.success("Task Created");
 
       onSuccess(res.data.task);
       onClose();
@@ -76,57 +76,61 @@ export default function CreateTaskModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <h2 className="text-xl font-bold text-white mb-4">Create Task</h2>
+      <h2 className="text-center font-bold text-green-600 text-xl mb-4">
+        Create New Task
+      </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Task Name */}
-        <input
-          name="name"
-          placeholder="Task Name"
-          value={form.name}
-          onChange={handleChange}
-          className="w-full p-3 rounded bg-gray-800 text-white"
-        />
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+      >
+        {/* Task Name (full width) */}
+        <div className="md:col-span-2">
+          <input
+            name="name"
+            placeholder="Task Name"
+            value={form.name}
+            onChange={handleChange}
+            className="w-full p-3 rounded bg-gray-800 text-white"
+          />
+        </div>
 
         {/* Team */}
-        <div>
-          <select
-            name="team"
-            value={form.team}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white mt-1"
-          >
-            <option value="">Select Team</option>
-            {teams?.map((team) => (
-              <option key={team._id} value={team._id}>
-                {team.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <select
+          name="team"
+          value={form.team}
+          onChange={handleChange}
+          className="p-2 rounded bg-gray-800 text-white"
+        >
+          <option value="">Select Team</option>
+          {teams?.map((team) => (
+            <option key={team._id} value={team._id}>
+              {team.name}
+            </option>
+          ))}
+        </select>
 
         {/* Project */}
-        <div>
-          <select
-            name="project"
-            value={form.project}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white mt-1"
-          >
-            <option value="">Select Project</option>
-            {filteredProjects.map((p) => (
-              <option key={p._id} value={p._id}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <select
+          name="project"
+          value={form.project}
+          onChange={handleChange}
+          className="p-2 rounded bg-gray-800 text-white"
+        >
+          <option value="">Select Project</option>
+          {filteredProjects.map((p) => (
+            <option key={p._id} value={p._id}>
+              {p.name}
+            </option>
+          ))}
+        </select>
 
-        {/* Owners */}
-        <div>
+        {/* Owners (full width) */}
+        {/* <div className="md:col-span-2">
           <label className="text-sm text-gray-400">Assign Owners</label>
           <select
             multiple
+            value={form.owners}
             onChange={handleOwnerChange}
             className="w-full p-2 rounded bg-gray-800 text-white mt-1 h-28"
           >
@@ -136,6 +140,35 @@ export default function CreateTaskModal({
               </option>
             ))}
           </select>
+        </div> */}
+
+        <div className="space-y-2 max-h-32 overflow-y-auto bg-gray-800 p-2 rounded">
+          {selectedTeam?.members?.map((member) => (
+            <label
+              key={member._id}
+              className="flex items-center gap-2 text-white"
+            >
+              <input
+                type="checkbox"
+                value={member._id}
+                checked={form.owners.includes(member._id)}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setForm({
+                      ...form,
+                      owners: [...form.owners, member._id],
+                    });
+                  } else {
+                    setForm({
+                      ...form,
+                      owners: form.owners.filter((id) => id !== member._id),
+                    });
+                  }
+                }}
+              />
+              {member.name}
+            </label>
+          ))}
         </div>
 
         {/* Tags */}
@@ -144,17 +177,17 @@ export default function CreateTaskModal({
           placeholder="Tags (comma separated)"
           value={form.tags}
           onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 text-white"
+          className="p-2 rounded bg-gray-800 text-white"
         />
 
         {/* Time */}
         <input
           type="number"
           name="timeToComplete"
-          placeholder="Time to complete (hours)"
+          placeholder="Time (hours)"
           value={form.timeToComplete}
           onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 text-white"
+          className="p-2 rounded bg-gray-800 text-white"
         />
 
         {/* Status */}
@@ -162,7 +195,7 @@ export default function CreateTaskModal({
           name="status"
           value={form.status}
           onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 text-white"
+          className="p-2 rounded bg-gray-800 text-white"
         >
           <option value="">Select Status</option>
           <option value="To Do">To Do</option>
@@ -176,7 +209,7 @@ export default function CreateTaskModal({
           name="priority"
           value={form.priority}
           onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 text-white"
+          className="p-2 rounded bg-gray-800 text-white"
         >
           <option value="">Select Priority</option>
           <option value="Low">Low</option>
@@ -184,9 +217,12 @@ export default function CreateTaskModal({
           <option value="High">High</option>
         </select>
 
-        <button className="w-full bg-green-600 hover:bg-green-700 p-2 rounded">
-          Create Task
-        </button>
+        {/* Button (full width) */}
+        <div className="md:col-span-2">
+          <button className="w-full bg-green-600 p-2 rounded">
+            Create Task
+          </button>
+        </div>
       </form>
     </Modal>
   );
