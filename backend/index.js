@@ -14,13 +14,15 @@ dotenv.config(); //--load env variables
 const app = express(); 
 
 const corsOptions = {
-  origin: ["http://localhost:5173", "https://task-sync-client.vercel.app/"],
+  origin: ["http://localhost:5173", "https://task-sync-client.vercel.app"],
+  methods: ["GET", "POST", "DELETE"],
   credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 // Middleware
-app.use(express.json());
 app.use(cors(corsOptions));
+app.use(express.json());
 
 const PORT = process.env.PORT || 3000; 
 
