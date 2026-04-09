@@ -61,7 +61,7 @@ export default function Login() {
           name="email"
           placeholder="Email"
           onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+          className="w-full p-3 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
         />
 
         <input
@@ -69,19 +69,19 @@ export default function Login() {
           name="password"
           placeholder="Password"
           onChange={handleChange}
-          className="w-full p-3 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+          className="w-full p-3 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
         />
 
         <button
           disabled={loading}
-          className="w-full bg-green-600 hover:bg-green-700 transition p-3 rounded-lg text-white font-semibold cursor-pointer"
+          className="w-full bg-cyan-600 hover:bg-cyan-700 transition p-3 rounded-lg text-white font-semibold cursor-pointer"
         >
           {loading ? "Logging in..." : "Login"}
         </button>
 
         <p className="text-gray-300 text-sm text-center">
           Don’t have an account?{" "}
-          <Link to="/signup" className="text-green-400 hover:underline">
+          <Link to="/signup" className="text-cyan-400 hover:underline">
             Sign up
           </Link>
         </p>
