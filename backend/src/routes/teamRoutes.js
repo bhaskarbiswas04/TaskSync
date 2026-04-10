@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.route("/").post(isAuthenticated, createTeam);
 router.route("/").get(isAuthenticated, getTeams);
-router.route("/all-teams").get(isAuthenticated, getAllTeams);
+router.route("/all").get(isAuthenticated, getAllTeams);
 
 export default router;
