@@ -126,7 +126,7 @@ export default function CreateTaskModal({
         </select>
 
         {/* Owners (full width) */}
-        {/* <div className="md:col-span-2">
+        <div className="md:col-span-2">
           <label className="text-sm text-gray-400">Assign Owners</label>
           <select
             multiple
@@ -140,9 +140,9 @@ export default function CreateTaskModal({
               </option>
             ))}
           </select>
-        </div> */}
+        </div>
 
-        <div className="space-y-2 max-h-32 overflow-y-auto bg-gray-800 p-2 rounded">
+        {/* <div className="space-y-2 max-h-32 overflow-y-auto bg-gray-800 p-2 rounded">
           {selectedTeam?.members?.map((member) => (
             <label
               key={member._id}
@@ -169,7 +169,7 @@ export default function CreateTaskModal({
               {member.name}
             </label>
           ))}
-        </div>
+        </div> */}
 
         {/* Tags */}
         <input
@@ -218,10 +218,13 @@ export default function CreateTaskModal({
         </select>
 
         {/* Button (full width) */}
+        
         <div className="md:col-span-2">
-          <button className="w-full bg-green-600 p-2 rounded">
+          <div className="flex justify-center">
+          <button className="w-30 bg-green-600 p-2 rounded">
             Create Task
           </button>
+          </div>
         </div>
       </form>
     </Modal>
