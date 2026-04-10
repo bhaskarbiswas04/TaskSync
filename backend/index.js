@@ -21,17 +21,10 @@ const allowedOrigins = [
 // Middleware
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: false,
+    origin: allowedOrigins,
+    credentials: false
   }),
 );
-
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000; 
@@ -49,14 +42,10 @@ connectDB()
     console.error("DB Connection Failed", err);
   });
 
-app.options("*", cors());
-
 //Testing route
 app.get("/", (req, res)=>{
     res.send("API is running smoothly for TaskSync");
 });
-
-
 
 //routes
 app.use("/api/auth", userRoutes);
