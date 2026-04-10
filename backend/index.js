@@ -28,7 +28,7 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true,
+    credentials: false,
   }),
 );
 
@@ -49,10 +49,14 @@ connectDB()
     console.error("DB Connection Failed", err);
   });
 
+app.options("*", cors());
+
 //Testing route
 app.get("/", (req, res)=>{
     res.send("API is running smoothly for TaskSync");
 });
+
+
 
 //routes
 app.use("/api/auth", userRoutes);

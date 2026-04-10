@@ -36,7 +36,6 @@ export const AuthProvider = ({ children }) => {
 
   //login
   const login = async (formData) => {
-    axios.defaults.withCredentials = true;
     const res = await API_BASE_URL.post("/auth/login", formData);
 
     console.log("LOGIN SUCCESS:", res.data);
