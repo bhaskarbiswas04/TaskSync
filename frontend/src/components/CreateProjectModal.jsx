@@ -3,7 +3,13 @@ import Modal from "./Modal";
 import API_BASE_URL from "../api/axios";
 import toast from "react-hot-toast";
 
-export default function CreateProjectModal({ isOpen, onClose, onSuccess, teams }) {
+import { useProjects } from "../context/ProjectContext";
+import { useTeams } from "../context/TeamContext";
+
+export default function CreateProjectModal({ isOpen, onClose }) {
+  const { setProjects } = useProjects();
+  const { teams } = useTeams();
+
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -22,7 +28,17 @@ export default function CreateProjectModal({ isOpen, onClose, onSuccess, teams }
 
       toast.success("Project Created");
 
-      onSuccess(res.data.project); // update UI instantly
+      // Normalize project (VERY IMPORTANT)
+      const newProject = {
+        ...res.data.project,
+        team: {
+          _id: res.data.project.team,
+        },
+      };
+
+      // Update global state
+      setProjects((prev) => [newProject, ...prev]);
+
       onClose();
     } catch (err) {
       toast.error("Failed to create project");
@@ -66,7 +82,9 @@ export default function CreateProjectModal({ isOpen, onClose, onSuccess, teams }
         </select>
 
         <div className="flex justify-center">
-          <button className="w-30 bg-blue-600 p-2 rounded cursor-pointer">Create</button>
+          <button className="w-30 bg-blue-600 p-2 rounded cursor-pointer">
+            Create
+          </button>
         </div>
       </form>
     </Modal>

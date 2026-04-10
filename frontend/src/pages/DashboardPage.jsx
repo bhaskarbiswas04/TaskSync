@@ -1,51 +1,26 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import ProjectCard from "../components/dashboard-comps/ProjectCard";
 import TaskCard from "../components/dashboard-comps/TaskCard";
-import { getProjects } from "../api/projectsApi";
-import { getTasks } from "../api/tasksApi";
-import { getTeams } from "../api/teamApi";
 import toast from "react-hot-toast";
+
+import { useProjects } from "../context/ProjectContext";
+import { useTasks } from "../context/TaskContext";
+import { useTeams } from "../context/TeamContext";
 
 import CreateProjectModal from "../components/CreateProjectModal";
 import CreateTaskModal from "../components/CreateTaskModal";
 
 export default function DashboardPage() {
-  const [projects, setProjects] = useState([]);
-  const [tasks, setTasks] = useState([]);
-  const [owners, setOwners] = useState([]);
-  const [teams, setTeams] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { projects, setProjects } = useProjects();
+  const { tasks, setTasks } = useTasks();
+  const { teams } = useTeams();
 
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [projectsData, tasksData, teamsData, ownersData] =
-          await Promise.all([
-            getProjects(),
-            getTasks(),
-            getTeams(),
-          ]);
-
-        setProjects(projectsData);
-        setTasks(tasksData);
-        setTeams(teamsData);
-        setOwners(ownersData);
-      } catch (error) {
-        toast.error("Failed to load data");
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) {
+  // Optional loading check (if you add loading in context later)
+  if (!projects || !tasks || !teams) {
     return (
       <DashboardLayout>
         <p className="text-white">Loading data...</p>
@@ -68,7 +43,6 @@ export default function DashboardPage() {
         onClose={() => setShowTaskModal(false)}
         teams={teams}
         projects={projects}
-        owners={owners}
         onSuccess={(newTask) => setTasks((prev) => [newTask, ...prev])}
       />
 
@@ -86,7 +60,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-5">
-          {projects?.map((p) => (
+          {projects.map((p) => (
             <ProjectCard key={p._id} project={p} />
           ))}
         </div>
@@ -108,7 +82,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-5">
-          {tasks?.map((t) => (
+          {tasks.map((t) => (
             <TaskCard key={t._id} task={t} />
           ))}
         </div>

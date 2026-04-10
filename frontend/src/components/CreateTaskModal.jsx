@@ -3,13 +3,17 @@ import Modal from "./Modal";
 import API_BASE_URL from "../api/axios";
 import toast from "react-hot-toast";
 
+import { useProjects } from "../context/ProjectContext";
+import { useTeams } from "../context/TeamContext";
+
 export default function CreateTaskModal({
   isOpen,
   onClose,
   onSuccess,
-  teams,
-  projects,
 }) {
+  const { projects, fetchProjects } = useProjects();
+  const { teams } = useTeams();
+
   const initialState = {
     name: "",
     project: "",
@@ -23,13 +27,26 @@ export default function CreateTaskModal({
 
   const [form, setForm] = useState(initialState);
 
-  // Reset form when modal opens
+  // FETCH LATEST DATA WHEN MODAL OPENS
   useEffect(() => {
-    if (isOpen) setForm(initialState);
+    if (isOpen) {
+      setForm(initialState);
+      fetchProjects(); // 🔥 ensures latest projects
+    }
   }, [isOpen]);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (name === "team") {
+      setForm({
+        ...form,
+        team: value,
+        project: "", // reset project
+      });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   };
 
   // Multi-select owners
@@ -66,13 +83,15 @@ export default function CreateTaskModal({
   };
 
   // Filter projects by selected team
-  const filteredProjects = projects.filter((p) => p.team?._id === form.team);
+  const filteredProjects = projects.filter((p) => {
+    const teamId = typeof p.team === "object" ? p.team._id : p.team;
 
+    return teamId === form.team;
+  });
   // Get selected team
   const selectedTeam = teams.find((t) => t._id === form.team);
 
   console.log(form);
-  
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -218,12 +237,12 @@ export default function CreateTaskModal({
         </select>
 
         {/* Button (full width) */}
-        
+
         <div className="md:col-span-2">
           <div className="flex justify-center">
-          <button className="w-30 bg-green-600 p-2 rounded">
-            Create Task
-          </button>
+            <button className="w-30 bg-green-600 p-2 rounded">
+              Create Task
+            </button>
           </div>
         </div>
       </form>
