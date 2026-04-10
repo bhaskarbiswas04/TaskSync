@@ -5,7 +5,6 @@ import TaskCard from "../components/dashboard-comps/TaskCard";
 import { getProjects } from "../api/projectsApi";
 import { getTasks } from "../api/tasksApi";
 import { getTeams } from "../api/teamApi";
-import { getAllUsers } from "../api/UserApi";
 import toast from "react-hot-toast";
 
 import CreateProjectModal from "../components/CreateProjectModal";
@@ -29,7 +28,6 @@ export default function DashboardPage() {
             getProjects(),
             getTasks(),
             getTeams(),
-            getAllUsers(),
           ]);
 
         setProjects(projectsData);
