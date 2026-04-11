@@ -2,7 +2,6 @@ import axios from "axios";
 
 const API_BASE_URL = axios.create({
   baseURL: "https://task-sync-backend-henna.vercel.app/api",
-  
 });
 
 //--Attach token 
