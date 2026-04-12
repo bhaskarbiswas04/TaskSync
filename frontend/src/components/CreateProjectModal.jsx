@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "./Modal";
-import API_BASE_URL from "../api/axios";
 import toast from "react-hot-toast";
+import { createProject } from "../api/projectsApi"; // Import the API function
 
 import { useProjects } from "../context/ProjectContext";
 import { useTeams } from "../context/TeamContext";
@@ -24,15 +24,17 @@ export default function CreateProjectModal({ isOpen, onClose }) {
     e.preventDefault();
 
     try {
-      const res = await API_BASE_URL.post("/projects", form);
+      // Call the API service
+      const data = await createProject(form);
 
       toast.success("Project Created");
 
-      // Normalize project (VERY IMPORTANT)
+      // Normalize project based on your existing logic
+      // Assuming 'data' contains { project: { ... } }
       const newProject = {
-        ...res.data.project,
+        ...data.project,
         team: {
-          _id: res.data.project.team,
+          _id: data.project.team,
         },
       };
 
@@ -41,7 +43,7 @@ export default function CreateProjectModal({ isOpen, onClose }) {
 
       onClose();
     } catch (err) {
-      toast.error("Failed to create project");
+      toast.error(err.response?.data?.message || "Failed to create project");
     }
   };
 
@@ -55,6 +57,7 @@ export default function CreateProjectModal({ isOpen, onClose }) {
         <input
           name="name"
           placeholder="Project Name"
+          required
           onChange={handleChange}
           className="w-full p-2 rounded bg-gray-800 text-white"
         />
@@ -69,11 +72,11 @@ export default function CreateProjectModal({ isOpen, onClose }) {
         <select
           name="team"
           value={form.team}
+          required
           onChange={handleChange}
           className="w-full p-2 rounded bg-gray-800 text-white"
         >
           <option value="">Select Team</option>
-
           {teams?.map((team) => (
             <option key={team._id} value={team._id}>
               {team.name}
@@ -82,7 +85,10 @@ export default function CreateProjectModal({ isOpen, onClose }) {
         </select>
 
         <div className="flex justify-center">
-          <button className="w-30 bg-blue-600 p-2 rounded cursor-pointer">
+          <button
+            type="submit"
+            className="w-30 bg-blue-600 p-2 rounded cursor-pointer hover:bg-blue-700 transition-colors"
+          >
             Create
           </button>
         </div>

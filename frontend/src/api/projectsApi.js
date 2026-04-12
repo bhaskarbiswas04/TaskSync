@@ -5,10 +5,11 @@ export const getProjects = async () => {
   return res.data;
 };
 
-export const createProject = async ()=>{
+export const createProject = async (projectData) => {
   try {
-    const response = await API_BASE_URL.post("")
+    const response = await API_BASE_URL.post("/projects", projectData);
+    return response.data;
   } catch (error) {
-    
+    throw error;
   }
-}
+};

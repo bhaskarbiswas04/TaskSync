@@ -1,11 +1,15 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { getProjects } from "../api/projectsApi";
+import { useAuth } from "./AuthContext";
+
+
 import toast from "react-hot-toast";
 
 const ProjectContext = createContext();
 
 export const ProjectProvider = ({ children }) => {
   const [projects, setProjects] = useState([]);
+  const { user } = useAuth();
 
   const fetchProjects = async () => {
     try {
