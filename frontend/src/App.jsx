@@ -4,6 +4,8 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
+import ProjectsPage from "./pages/ProjectListPage";
+import ProjectViewPage from "./pages/ProjectViewPage";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/projects/:projectId" element={<ProjectViewPage />} />
       </Routes>
     </BrowserRouter>
   );
