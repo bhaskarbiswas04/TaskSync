@@ -27,7 +27,7 @@ export default function Topbar() {
 
         <button
           onClick={handleLogout}
-          className="bg-red-500/80 hover:bg-red-600 px-4 py-1 rounded-lg text-sm"
+          className="bg-red-500/80 hover:bg-red-600 px-4 py-1 rounded-lg text-sm cursor-pointer"
         >
           Logout
         </button>
