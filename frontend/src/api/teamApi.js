@@ -11,3 +11,11 @@ export const getAllTeams = async ()=>{
   
   return response.data.teams;
 }
+
+export const addMembersToTeam = async (teamId, members) => {
+  const res = await API_BASE_URL.post(`/teams/${teamId}/add-member`, {
+    members,
+  });
+
+  return res.data;
+};
