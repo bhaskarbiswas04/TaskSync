@@ -30,28 +30,24 @@ export const createTeam = async (req, res) => {
 };
 
 //--RouteLogic: GET- get all Team : User-specific
-export const getTeams = async (req, res)=>{
-    try {
-        const teams = await Team.find({
-            $or: [
-                { createdBy: req.user._id},
-                { members: req.user._id},
-            ]
-        }).populate("members", "name email");
+export const getTeams = async (req, res) => {
+  try {
+    const teams = await Team.find({
+      $or: [{ createdBy: req.user._id }, { members: req.user._id }],
+    }).populate("members", "name email");
 
-        return res.status(200).json(teams);
-    } catch (error) {
-        res.status(500).json({
-          message: "Error fetching teams",
-        });
-    }
-}
+    return res.status(200).json(teams);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching teams",
+    });
+  }
+};
 
 //--RouteLogic: GET- all Teams
 export const getAllTeams = async (req, res) => {
   try {
-    const teams = await Team.find()
-      .populate("members", "name email avatar")
+    const teams = await Team.find().populate("members", "name email avatar");
 
     //-Validation
     if (!teams || teams.length === 0) {
@@ -76,7 +72,7 @@ export const getAllTeams = async (req, res) => {
 export const addMembersToTeam = async (req, res) => {
   try {
     const { teamId } = req.params;
-    const { members } = req.body; //array of userIds.
+    const { members } = req.body;
 
     if (!members || members.length === 0) {
       return res.status(400).json({
@@ -92,14 +88,15 @@ export const addMembersToTeam = async (req, res) => {
       });
     }
 
-    // Avoid duplicates
-    const uniqueMembers = members.filter((m) => !team.members.includes(m));
+    // 🔥 FIX: convert ObjectId → string
+    const existingMembers = team.members.map((m) => m.toString());
+
+    const uniqueMembers = members.filter((m) => !existingMembers.includes(m));
 
     team.members.push(...uniqueMembers);
 
     await team.save();
 
-    // populate for frontend
     const updatedTeam = await Team.findById(teamId).populate(
       "members",
       "name email",
@@ -110,9 +107,9 @@ export const addMembersToTeam = async (req, res) => {
       team: updatedTeam,
     });
   } catch (error) {
-    console.log(error);
+    console.log("ADD MEMBER ERROR:", error); // DEBUG
     res.status(500).json({
       message: "Server error",
     });
   }
-}
+};
