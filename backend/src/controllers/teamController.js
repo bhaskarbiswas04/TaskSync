@@ -1,4 +1,5 @@
 import { Team } from "../models/Team.model.js";
+import { User } from "../models/User.model.js";
 
 //--RouteLogic: POST- create a new Team
 export const createTeam = async (req, res) => {
@@ -70,3 +71,48 @@ export const getAllTeams = async (req, res) => {
     });
   }
 };
+
+//--RouteLogic: POST- Add Multiple Users/Members
+export const addMembersToTeam = async (req, res) => {
+  try {
+    const { teamId } = req.params;
+    const { members } = req.body; //array of userIds.
+
+    if (!members || members.length === 0) {
+      return res.status(400).json({
+        message: "No members provided",
+      });
+    }
+
+    const team = await Team.findById(teamId);
+
+    if (!team) {
+      return res.status(404).json({
+        message: "Team not found",
+      });
+    }
+
+    // Avoid duplicates
+    const uniqueMembers = members.filter((m) => !team.members.includes(m));
+
+    team.members.push(...uniqueMembers);
+
+    await team.save();
+
+    // populate for frontend
+    const updatedTeam = await Team.findById(teamId).populate(
+      "members",
+      "name email",
+    );
+
+    return res.status(200).json({
+      message: "Members added successfully",
+      team: updatedTeam,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
+}
