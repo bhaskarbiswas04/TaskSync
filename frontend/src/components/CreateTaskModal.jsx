@@ -240,7 +240,7 @@ export default function CreateTaskModal({
 
         <div className="md:col-span-2">
           <div className="flex justify-center">
-            <button className="w-30 bg-green-600 p-2 rounded">
+            <button className="w-30 bg-green-600 p-2 rounded cursor-pointer">
               Create Task
             </button>
           </div>

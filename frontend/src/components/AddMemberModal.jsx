@@ -64,7 +64,7 @@ export default function AddMemberModal({ isOpen, onClose, teamId }) {
 
       <button
         onClick={handleSubmit}
-        className="w-full bg-blue-600 mt-4 p-2 rounded"
+        className="w-full bg-blue-600 mt-4 p-2 rounded cursor-pointer"
       >
         Add Members
       </button>
