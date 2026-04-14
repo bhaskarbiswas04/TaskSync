@@ -6,6 +6,8 @@ import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProjectsPage from "./pages/ProjectListPage";
 import ProjectViewPage from "./pages/ProjectViewPage";
+import TeamsPage from "./pages/TeamsPage";
+import TeamViewPage from "./pages/TeamViewPage";
 
 function App() {
   return (
@@ -24,6 +26,9 @@ function App() {
         />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/projects/:projectId" element={<ProjectViewPage />} />
+
+        <Route path="/teams" element={<TeamsPage />} />
+        <Route path="/teams/:teamId" element={<TeamViewPage />} />
       </Routes>
     </BrowserRouter>
   );

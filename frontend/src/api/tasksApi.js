@@ -6,3 +6,4 @@ export const getTasks = async (filters = {}) => {
   const res = await API_BASE_URL.get(`/tasks?${query}`);
   return res.data;
 };
+
