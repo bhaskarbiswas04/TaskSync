@@ -203,7 +203,7 @@ export default function CreateTaskModal({
         <input
           type="number"
           name="timeToComplete"
-          placeholder="Time (hours)"
+          placeholder="Time (Days)"
           value={form.timeToComplete}
           onChange={handleChange}
           className="p-2 rounded bg-gray-800 text-white"
