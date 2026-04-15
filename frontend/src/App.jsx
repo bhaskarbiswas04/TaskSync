@@ -8,6 +8,7 @@ import ProjectsPage from "./pages/ProjectListPage";
 import ProjectViewPage from "./pages/ProjectViewPage";
 import TeamsPage from "./pages/TeamsPage";
 import TeamViewPage from "./pages/TeamViewPage";
+import TaskViewPage from "./pages/TaskViewPage";
 
 import { UIProvider, useUI } from "./context/UIContext";
 import { AuthProvider } from "./context/AuthContext";
@@ -44,6 +45,7 @@ function AppContent() {
 
         <Route path="/teams" element={<TeamsPage />} />
         <Route path="/teams/:teamId" element={<TeamViewPage />} />
+        <Route path="/tasks/:taskId" element={<TaskViewPage />} />
       </Routes>
     </>
   );
