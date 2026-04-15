@@ -147,11 +147,24 @@ export default function CreateTaskModal({
         {/* Owners (full width) */}
         <div className="md:col-span-2">
           <label className="text-sm text-gray-400">Assign Owners</label>
+
+          {/* Helper Text */}
+          {!form.team && (
+            <p className="text-xs text-yellow-400 mt-1">
+              ⚠ Select a team first to choose owners
+            </p>
+          )}
+
           <select
             multiple
             value={form.owners}
             onChange={handleOwnerChange}
-            className="w-full p-2 rounded bg-gray-800 text-white mt-1 h-28"
+            disabled={!form.team} // 🔥 disable until team selected
+            className={`w-full p-2 rounded mt-1 h-28 ${
+              !form.team
+                ? "bg-gray-700 text-gray-500 cursor-not-allowed"
+                : "bg-gray-800 text-white"
+            }`}
           >
             {selectedTeam?.members?.map((member) => (
               <option key={member._id} value={member._id}>
