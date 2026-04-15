@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { useProjects } from "../context/ProjectContext";
 import { useTasks } from "../context/TaskContext";
 import { useTeams } from "../context/TeamContext";
+import { useUI } from "../context/UIContext"; // ✅ NEW
 
 import CreateProjectModal from "../components/CreateProjectModal";
 import CreateTaskModal from "../components/CreateTaskModal";
@@ -15,6 +16,8 @@ export default function DashboardPage() {
   const { projects, setProjects } = useProjects();
   const { tasks, setTasks } = useTasks();
   const { teams } = useTeams();
+
+  const { triggerPageLoading } = useUI(); // ✅ NEW
 
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
@@ -26,7 +29,13 @@ export default function DashboardPage() {
         isOpen={showProjectModal}
         onClose={() => setShowProjectModal(false)}
         teams={teams}
-        onSuccess={(newProject) => setProjects((prev) => [newProject, ...prev])}
+        onSuccess={(newProject) => {
+          triggerPageLoading(); // 🔥 show loader
+
+          setTimeout(() => {
+            setProjects((prev) => [newProject, ...prev]);
+          }, 200); // small delay for smooth UX
+        }}
       />
 
       <CreateTaskModal
@@ -34,7 +43,13 @@ export default function DashboardPage() {
         onClose={() => setShowTaskModal(false)}
         teams={teams}
         projects={projects}
-        onSuccess={(newTask) => setTasks((prev) => [newTask, ...prev])}
+        onSuccess={(newTask) => {
+          triggerPageLoading(); // 🔥 show loader
+
+          setTimeout(() => {
+            setTasks((prev) => [newTask, ...prev]);
+          }, 200);
+        }}
       />
 
       {/* Projects */}

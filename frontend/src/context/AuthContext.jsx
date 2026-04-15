@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import API_BASE_URL from "../api/axios";
-import axios from "axios";
 
 const AuthContext =  createContext();
 
@@ -22,7 +21,9 @@ export const AuthProvider = ({ children }) => {
           localStorage.removeItem("token");
           setUser(null);
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+        });
     } else {
       setLoading(false);
     }
