@@ -1,15 +1,18 @@
 import { useParams } from "react-router-dom";
 import { useTeams } from "../context/TeamContext";
-import { useTasks } from "../context/TaskContext";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { useState, useEffect } from "react";
 import AddMemberModal from "../components/AddMemberModal";
-import { useUI } from "../context/UIContext"; // ✅ NEW
+import { useUI } from "../context/UIContext";
+
+import { useProjects } from "../context/ProjectContext";
+import ProjectCard from "../components/dashboard-comps/ProjectCard";
+
 
 export default function TeamViewPage() {
   const { teamId } = useParams();
   const { teams } = useTeams();
-  const { tasks } = useTasks();
+  const { projects } = useProjects();
   const { triggerPageLoading } = useUI(); // ✅ NEW
 
   const [showModal, setShowModal] = useState(false);
@@ -20,7 +23,7 @@ export default function TeamViewPage() {
   }, []);
 
   // 🔥 Safe checks
-  if (!teams || !tasks) return null;
+  if (!teams || !projects) return null;
 
   const team = teams.find((t) => t._id === teamId);
 
@@ -32,13 +35,13 @@ export default function TeamViewPage() {
     );
   }
 
-  // Filter tasks for team
-  const teamTasks = tasks.filter((task) => {
-    const taskTeamId =
-      typeof task.team === "object" ? task.team?._id : task.team;
+  const teamProjects = projects.filter((project) => {
+    const projectTeamId =
+      typeof project.team === "object" ? project.team?._id : project.team;
 
-    return taskTeamId === teamId;
+    return projectTeamId === teamId;
   });
+
 
   return (
     <DashboardLayout>
@@ -73,24 +76,18 @@ export default function TeamViewPage() {
           </button>
         </div>
 
-        {/* TASKS */}
-        <div className="mt-10">
-          <h2 className="text-xl text-white mb-4">Tasks</h2>
+        <div className="w-80 h-px bg-cyan-500 my-6"></div>
 
-          {teamTasks.length === 0 ? (
-            <p className="text-gray-500">No tasks assigned to this team</p>
+        {/* PROJECTS */}
+        <div className="mt-10">
+          <h2 className="text-xl text-white mb-4">Assigned Projects</h2>
+
+          {teamProjects.length === 0 ? (
+            <p className="text-gray-500">No projects assigned to this team</p>
           ) : (
             <div className="grid md:grid-cols-3 gap-4">
-              {teamTasks.map((task) => (
-                <div
-                  key={task._id}
-                  className="bg-white/5 p-4 rounded hover:bg-white/10 transition"
-                >
-                  <p className="text-white font-semibold">{task.name}</p>
-                  <p className="text-sm text-gray-400 mt-1">
-                    {task.status} • {task.priority}
-                  </p>
-                </div>
+              {teamProjects.map((project) => (
+                <ProjectCard key={project._id} project={project} />
               ))}
             </div>
           )}
