@@ -11,10 +11,6 @@ import { useTeams } from "../context/TeamContext";
 import CreateProjectModal from "../components/CreateProjectModal";
 import CreateTaskModal from "../components/CreateTaskModal";
 
-// ✅ NEW IMPORTS
-import Loader from "../components/loading-state/Loader";
-import SkeletonCard from "../components/loading-state/SkeletonCard";
-
 export default function DashboardPage() {
   const { projects, setProjects } = useProjects();
   const { tasks, setTasks } = useTasks();
@@ -22,8 +18,6 @@ export default function DashboardPage() {
 
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
-
-  const isLoading = !projects || !tasks || !teams;
 
   return (
     <DashboardLayout>
@@ -57,11 +51,9 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-5">
-          {isLoading
-            ? Array(6)
-                .fill(0)
-                .map((_, i) => <SkeletonCard key={i} />)
-            : projects.map((p) => <ProjectCard key={p._id} project={p} />)}
+          {projects?.map((p) => (
+            <ProjectCard key={p._id} project={p} />
+          ))}
         </div>
       </div>
 
@@ -81,20 +73,11 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-5">
-          {isLoading
-            ? Array(6)
-                .fill(0)
-                .map((_, i) => <SkeletonCard key={i} />)
-            : tasks.map((t) => <TaskCard key={t._id} task={t} />)}
+          {tasks?.map((t) => (
+            <TaskCard key={t._id} task={t} />
+          ))}
         </div>
       </div>
-
-      {/* OPTIONAL FULL PAGE LOADER (fallback) */}
-      {isLoading && (
-        <div className="mt-6">
-          <Loader />
-        </div>
-      )}
     </DashboardLayout>
   );
 }

@@ -10,13 +10,17 @@ const ProjectContext = createContext();
 export const ProjectProvider = ({ children }) => {
   const [projects, setProjects] = useState([]);
   const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
 
   const fetchProjects = async () => {
     try {
+      setLoading(true);
       const data = await getProjects();
       setProjects(data);
     } catch (err) {
       toast.error("Failed to load projects");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -25,7 +29,9 @@ export const ProjectProvider = ({ children }) => {
   }, []);
 
   return (
-    <ProjectContext.Provider value={{ projects, setProjects, fetchProjects }}>
+    <ProjectContext.Provider
+      value={{ projects, setProjects, fetchProjects, loading }}
+    >
       {children}
     </ProjectContext.Provider>
   );

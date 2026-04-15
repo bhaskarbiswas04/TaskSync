@@ -1,6 +1,9 @@
 import { NavLink } from "react-router-dom";
+import { useUI } from "../context/UIContext";
 
 export default function Sidebar() {
+  const { triggerPageLoading } = useUI();
+  
   const menuItems = [
     { name: "Dashboard", path: "/dashboard" },
     { name: "Projects", path: "/projects" },
@@ -19,12 +22,13 @@ export default function Sidebar() {
         {menuItems.map((item) => (
           <NavLink
             key={item.name}
+            onClick={triggerPageLoading}
             to={item.path}
-            end={item.path === "/projects"} // 🔥 important fix
+            end={item.path === "/projects"}
             className={({ isActive }) =>
               `block px-4 py-2 rounded-lg transition-all duration-200 ${
                 isActive
-                  ? "bg-linear-to-r from-cyan-500 to-blue-600 text-white shadow-md"
+                  ? "bg-linear-to-r from-blue-500 to-blue-800 text-white shadow-md"
                   : "text-gray-300 hover:bg-white/10 hover:text-white"
               }`
             }
