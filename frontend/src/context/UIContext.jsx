@@ -4,6 +4,7 @@ const UIContext = createContext();
 
 export const UIProvider = ({ children }) => {
   const [pageLoading, setPageLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const triggerPageLoading = () => {
     setPageLoading(true);
@@ -14,7 +15,9 @@ export const UIProvider = ({ children }) => {
   };
 
   return (
-    <UIContext.Provider value={{ pageLoading, triggerPageLoading }}>
+    <UIContext.Provider
+      value={{ pageLoading, triggerPageLoading, searchQuery, setSearchQuery }}
+    >
       {children}
     </UIContext.Provider>
   );

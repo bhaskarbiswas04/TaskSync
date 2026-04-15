@@ -1,8 +1,10 @@
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useUI } from "../context/UIContext";
 
 export default function Topbar() {
   const { user, logout } = useAuth();
+  const { searchQuery, setSearchQuery } = useUI();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -18,7 +20,9 @@ export default function Topbar() {
     <div className="h-16 bg-white/5 backdrop-blur-lg border-b border-white/10 flex items-center justify-between px-6">
       <input
         type="text"
-        placeholder="Search..."
+        placeholder="Search projects..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
         className="bg-white/10 border border-white/20 text-white px-4 py-2 rounded-lg w-1/3 focus:outline-none"
       />
 

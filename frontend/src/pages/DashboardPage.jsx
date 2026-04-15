@@ -2,12 +2,10 @@ import { useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import ProjectCard from "../components/dashboard-comps/ProjectCard";
 import TaskCard from "../components/dashboard-comps/TaskCard";
-import toast from "react-hot-toast";
-
 import { useProjects } from "../context/ProjectContext";
 import { useTasks } from "../context/TaskContext";
 import { useTeams } from "../context/TeamContext";
-import { useUI } from "../context/UIContext"; // ✅ NEW
+import { useUI } from "../context/UIContext";
 
 import CreateProjectModal from "../components/CreateProjectModal";
 import CreateTaskModal from "../components/CreateTaskModal";
@@ -17,10 +15,17 @@ export default function DashboardPage() {
   const { tasks, setTasks } = useTasks();
   const { teams } = useTeams();
 
-  const { triggerPageLoading } = useUI(); // ✅ NEW
+  const { triggerPageLoading, searchQuery } = useUI();
 
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
+
+  const filteredProjects = projects.filter((p) =>
+    [p.name, p.team?.name]
+      .join(" ")
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase()),
+  );
 
   return (
     <DashboardLayout>
@@ -44,7 +49,7 @@ export default function DashboardPage() {
         teams={teams}
         projects={projects}
         onSuccess={(newTask) => {
-          triggerPageLoading(); // 🔥 show loader
+          triggerPageLoading();
 
           setTimeout(() => {
             setTasks((prev) => [newTask, ...prev]);
@@ -66,9 +71,11 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-5">
-          {projects?.map((p) => (
-            <ProjectCard key={p._id} project={p} />
-          ))}
+          {filteredProjects.length === 0 ? (
+            <p className="text-gray-400 ml-6">No projects found!</p>
+          ) : (
+            filteredProjects.map((p) => <ProjectCard key={p._id} project={p} />)
+          )}
         </div>
       </div>
 
