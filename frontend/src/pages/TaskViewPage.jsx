@@ -94,7 +94,9 @@ export default function TaskViewPage() {
             ← Back
           </button>
 
-          <h1 className="text-3xl font-bold text-white text-center">Task: {task.name}</h1>
+          <h1 className="text-3xl font-bold text-white text-center">
+            Task: {task.name}
+          </h1>
         </div>
 
         {/* DETAILS CARD */}
@@ -124,19 +126,25 @@ export default function TaskViewPage() {
           <div>
             <span className="text-gray-500">Tags:</span>
             <div className="flex gap-2 mt-1 flex-wrap">
-              {task.tags?.map((tag, i) => (
-                <span
-                  key={i}
-                  className="bg-blue-600/30 px-2 py-1 rounded text-xs"
-                >
-                  {tag}
+              {task.tags && task.tags.length > 0 ? (
+                task.tags.map((tag, i) => (
+                  <span
+                    key={i}
+                    className="bg-blue-600/30 px-2 py-1 rounded text-xs"
+                  >
+                    {tag}
+                  </span>
+                ))
+              ) : (
+                <span className="text-gray-400 text-xs italic">
+                  No Tags available.
                 </span>
-              ))}
+              )}
             </div>
           </div>
 
           <p className="text-gray-300">
-            <span className="text-gray-500">Time:</span> {task.timeToComplete}{" "}
+            <span className="text-gray-500">Due:</span> {task.timeToComplete}{" "}
             days
           </p>
 
@@ -144,14 +152,16 @@ export default function TaskViewPage() {
           <div className="flex items-center justify-between mt-6">
             <div>
               <span className="text-gray-500">Status:</span>{" "}
-              <span className={` ${task.status === "Completed" ? "bg-green-600" : "bg-cyan-600"} px-2 py-1 rounded text-xs`}>
+              <span
+                className={` ${task.status === "Completed" ? "bg-green-600" : "bg-cyan-600"} px-2 py-1 rounded text-xs`}
+              >
                 {task.status}
               </span>
             </div>
 
             {/* ACTIONS */}
             <div className="flex gap-2">
-                <p className="text-gray-400">Update :</p>
+              <p className="text-gray-400">Update :</p>
               <button
                 onClick={() => handleStatusChange("To Do")}
                 className="bg-gray-700 px-3 py-1 rounded text-sm cursor-pointer"

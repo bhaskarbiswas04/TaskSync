@@ -3,14 +3,16 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import { useProjects } from "../context/ProjectContext";
 import { useTasks } from "../context/TaskContext";
 import { useState, useEffect } from "react";
-import { useUI } from "../context/UIContext"; // ✅ NEW
+import { useUI } from "../context/UIContext";
+import { useNavigate } from "react-router-dom";
 
 export default function ProjectViewPage() {
   const { projectId } = useParams();
 
   const { projects } = useProjects();
   const { tasks } = useTasks();
-  const { triggerPageLoading } = useUI(); // ✅ NEW
+  const { triggerPageLoading } = useUI();
+  const navigate = useNavigate();
 
   const [filters, setFilters] = useState({
     status: "",
@@ -101,7 +103,8 @@ export default function ProjectViewPage() {
               filteredTasks.map((task) => (
                 <tr
                   key={task._id}
-                  className="border-b border-gray-800 hover:bg-gray-800 transition"
+                  onClick={() => navigate(`/tasks/${task._id}`)} 
+                  className="border-b border-gray-800 hover:bg-gray-800 hover:scale-[1.01] transition cursor-pointer"
                 >
                   <td className="p-3">{task.name}</td>
 
