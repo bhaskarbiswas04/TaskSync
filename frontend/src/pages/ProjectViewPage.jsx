@@ -2,21 +2,31 @@ import { useParams } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { useProjects } from "../context/ProjectContext";
 import { useTasks } from "../context/TaskContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useUI } from "../context/UIContext"; // ✅ NEW
 
 export default function ProjectViewPage() {
   const { projectId } = useParams();
 
   const { projects } = useProjects();
   const { tasks } = useTasks();
+  const { triggerPageLoading } = useUI(); // ✅ NEW
 
   const [filters, setFilters] = useState({
     status: "",
     priority: "",
   });
 
-  // Get current project
-  const project = projects.find((p) => p._id === projectId);
+  // Trigger loader on page load
+  useEffect(() => {
+    triggerPageLoading(400);
+  }, []);
+
+  // Safe project fetch
+  const project = projects?.find((p) => p._id === projectId);
+
+  // Prevent crash before data is ready
+  if (!projects || !tasks) return null;
 
   // Filter tasks for this project
   const projectTasks = tasks.filter((task) => {
@@ -25,8 +35,6 @@ export default function ProjectViewPage() {
 
     return taskProjectId && taskProjectId === projectId;
   });
-
-  console.log("TASKS:", tasks);
 
   // Apply filters
   const filteredTasks = projectTasks.filter((task) => {
@@ -40,7 +48,7 @@ export default function ProjectViewPage() {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-white">
-          {project?.name || "Project"}
+          {project?.name || "Loading Project..."}
         </h1>
         <p className="text-gray-400">{project?.description}</p>
       </div>
@@ -83,41 +91,49 @@ export default function ProjectViewPage() {
           </thead>
 
           <tbody>
-            {filteredTasks.map((task) => (
-              <tr
-                key={task._id}
-                className="border-b border-gray-800 hover:bg-gray-800 transition"
-              >
-                <td className="p-3">{task.name}</td>
-
-                <td className="p-3">
-                  {task.owners?.map((o) => (
-                    <span
-                      key={o._id}
-                      className="bg-gray-700 px-2 py-1 rounded text-xs mr-1"
-                    >
-                      {o.name}
-                    </span>
-                  ))}
-                </td>
-
-                <td className="p-3">
-                  <span className="px-2 py-1 rounded text-xs bg-blue-600">
-                    {task.priority}
-                  </span>
-                </td>
-
-                <td className="p-3">
-                  {task.timeToComplete ? `${task.timeToComplete} hrs` : "-"}
-                </td>
-
-                <td className="p-3">
-                  <span className="px-2 py-1 rounded text-xs bg-green-600">
-                    {task.status}
-                  </span>
+            {filteredTasks.length === 0 ? (
+              <tr>
+                <td colSpan="5" className="p-6 text-center text-gray-500">
+                  No tasks found for this project
                 </td>
               </tr>
-            ))}
+            ) : (
+              filteredTasks.map((task) => (
+                <tr
+                  key={task._id}
+                  className="border-b border-gray-800 hover:bg-gray-800 transition"
+                >
+                  <td className="p-3">{task.name}</td>
+
+                  <td className="p-3">
+                    {task.owners?.map((o) => (
+                      <span
+                        key={o._id}
+                        className="bg-gray-700 px-2 py-1 rounded text-xs mr-1"
+                      >
+                        {o.name}
+                      </span>
+                    ))}
+                  </td>
+
+                  <td className="p-3">
+                    <span className="px-2 py-1 rounded text-xs bg-blue-600">
+                      {task.priority}
+                    </span>
+                  </td>
+
+                  <td className="p-3">
+                    {task.timeToComplete ? `${task.timeToComplete} hrs` : "-"}
+                  </td>
+
+                  <td className="p-3">
+                    <span className="px-2 py-1 rounded text-xs bg-green-600">
+                      {task.status}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

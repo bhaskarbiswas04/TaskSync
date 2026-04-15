@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "./Modal";
 import toast from "react-hot-toast";
-import { createProject } from "../api/projectsApi"; // Import the API function
+import { createProject } from "../api/projectsApi";
 
 import { useProjects } from "../context/ProjectContext";
 import { useTeams } from "../context/TeamContext";
@@ -24,22 +24,32 @@ export default function CreateProjectModal({ isOpen, onClose }) {
     e.preventDefault();
 
     try {
-      // Call the API service
       const data = await createProject(form);
 
       toast.success("Project Created");
 
-      // Normalize project based on your existing logic
-      // Assuming 'data' contains { project: { ... } }
+      // 🔥 FIX: Map team ID → full team object
+      const selectedTeam = teams.find(
+        (t) => String(t._id) === String(data.project.team),
+      );
+
       const newProject = {
         ...data.project,
-        team: {
+        team: selectedTeam || {
           _id: data.project.team,
+          name: "Unknown Team",
         },
       };
 
-      // Update global state
+      // ✅ Update global state instantly
       setProjects((prev) => [newProject, ...prev]);
+
+      // ✅ Reset form
+      setForm({
+        name: "",
+        description: "",
+        team: "",
+      });
 
       onClose();
     } catch (err) {
@@ -54,21 +64,26 @@ export default function CreateProjectModal({ isOpen, onClose }) {
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-3">
+        {/* Project Name */}
         <input
           name="name"
           placeholder="Project Name"
           required
+          value={form.name}
           onChange={handleChange}
           className="w-full p-2 rounded bg-gray-800 text-white"
         />
 
+        {/* Description */}
         <input
           name="description"
           placeholder="Description"
+          value={form.description}
           onChange={handleChange}
           className="w-full p-2 rounded bg-gray-800 text-white"
         />
 
+        {/* Team Dropdown */}
         <select
           name="team"
           value={form.team}
@@ -84,6 +99,7 @@ export default function CreateProjectModal({ isOpen, onClose }) {
           ))}
         </select>
 
+        {/* Submit */}
         <div className="flex justify-center">
           <button
             type="submit"

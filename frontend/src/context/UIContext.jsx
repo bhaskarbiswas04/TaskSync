@@ -10,7 +10,7 @@ export const UIProvider = ({ children }) => {
 
     setTimeout(() => {
       setPageLoading(false);
-    }, 400);
+    }, 600);
   };
 
   return (
