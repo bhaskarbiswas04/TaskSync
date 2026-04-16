@@ -5,10 +5,12 @@ import { useTasks } from "../context/TaskContext";
 import { useState, useEffect } from "react";
 import { useUI } from "../context/UIContext";
 import { useNavigate } from "react-router-dom";
+import CreateTaskModal from "../components/CreateTaskModal";
 
 export default function ProjectViewPage() {
-  const { projectId } = useParams();
 
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const { projectId } = useParams();
   const { projects } = useProjects();
   const { tasks } = useTasks();
   const { triggerPageLoading } = useUI();
@@ -47,12 +49,46 @@ export default function ProjectViewPage() {
 
   return (
     <DashboardLayout>
+      <CreateTaskModal
+        isOpen={showTaskModal}
+        onClose={() => setShowTaskModal(false)}
+        projects={projects}
+        onSuccess={(newTask) => {
+          triggerPageLoading(200);
+
+          setTimeout(() => {
+            // 🔥 update tasks instantly
+            const updatedTask = {
+              ...newTask,
+              project: project, // attach current project
+            };
+
+            // push to context
+            tasks.unshift(updatedTask);
+          }, 200);
+        }}
+      />
       {/* Header */}
-      <div className="mb-6">
+      {/* <div className="mb-6">
         <h1 className="text-3xl font-bold text-white">
           {project?.name || "Loading Project..."}
         </h1>
         <p className="text-gray-400">{project?.description}</p>
+      </div> */}
+      <div className="mb-6 flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-white">
+            {project?.name || "Loading Project..."}
+          </h1>
+          <p className="text-gray-400">{project?.description}</p>
+        </div>
+
+        <button
+          onClick={() => setShowTaskModal(true)}
+          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm shadow-md"
+        >
+          + New Task
+        </button>
       </div>
 
       {/* Filters */}
@@ -103,7 +139,7 @@ export default function ProjectViewPage() {
               filteredTasks.map((task) => (
                 <tr
                   key={task._id}
-                  onClick={() => navigate(`/tasks/${task._id}`)} 
+                  onClick={() => navigate(`/tasks/${task._id}`)}
                   className="border-b border-gray-800 hover:bg-gray-800 hover:scale-[1.01] transition cursor-pointer"
                 >
                   <td className="p-3">{task.name}</td>
@@ -126,7 +162,7 @@ export default function ProjectViewPage() {
                   </td>
 
                   <td className="p-3">
-                    {task.timeToComplete ? `${task.timeToComplete} hrs` : "-"}
+                    {task.timeToComplete ? `${task.timeToComplete} Days` : "-"}
                   </td>
 
                   <td className="p-3">

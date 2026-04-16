@@ -76,7 +76,7 @@ export default function ReportsPage() {
     labels: ["Pending Work"],
     datasets: [
       {
-        label: "Hours",
+        label: "Days",
         data: [totalPendingHours],
         backgroundColor: "#f59e0b", // amber
         borderRadius: 6,
@@ -84,9 +84,7 @@ export default function ReportsPage() {
     ],
   };
 
-  // =========================
-  // 🔥 3. TASKS BY TEAM
-  // =========================
+  // 3. TASKS BY TEAM
 
   const teamMap = {};
 
@@ -101,19 +99,17 @@ export default function ReportsPage() {
       {
         data: Object.values(teamMap),
         backgroundColor: [
-          "#3b82f6", // blue
-          "#10b981", // green
-          "#f59e0b", // yellow
-          "#ef4444", // red
-          "#8b5cf6", // purple
+          "#3b82f6", 
+          "#10b981",
+          "#f59e0b", 
+          "#ef4444",
+          "#8b5cf6", 
         ],
       },
     ],
   };
 
-  // =========================
-  // 🔥 4. TASKS BY OWNER
-  // =========================
+  // 4. TASKS BY OWNER
 
   const ownerMap = {};
 
@@ -143,7 +139,7 @@ export default function ReportsPage() {
     plugins: {
       legend: {
         labels: {
-          color: "#e5e7eb", // light gray text
+          color: "#e5e7eb",
         },
       },
     },
@@ -164,7 +160,7 @@ export default function ReportsPage() {
     <div className="p-6">
       <h1 className="text-3xl text-white font-bold mb-6">Reports</h1>
 
-      {/* 🔥 2x2 GRID */}
+      {/* 2x2 GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* 1. LAST WEEK */}
