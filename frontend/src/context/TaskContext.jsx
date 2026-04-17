@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import {
   getTasks,
   createTask as createTaskAPI,
-  updateTaskStatus,
+  updateTask as updateTaskAPI,
   deleteTask as deleteTaskAPI,
 } from "../api/tasksApi";
 import { useAuth } from "./AuthContext";
@@ -17,7 +17,7 @@ export const TaskProvider = ({ children }) => {
   const { user } = useAuth();
   const { projects } = useProjects();
   const { teams } = useTeams();
-  
+
   const reportsContext = useReports();
   const fetchReports = reportsContext?.fetchReports;
 
@@ -54,24 +54,25 @@ export const TaskProvider = ({ children }) => {
   const createTask = async (payload) => {
     try {
       const data = await createTaskAPI(payload);
-      
 
       const rawTask = data.task;
 
       // 🔥 NORMALIZATION
+      const selectedTeam =
+        typeof rawTask.team === "object"
+          ? rawTask.team
+          : teams.find((t) => String(t._id) === String(rawTask.team));
 
-      const selectedTeam = teams.find(
-        (t) => String(t._id) === String(rawTask.team),
-      );
+      const selectedProject =
+        typeof rawTask.project === "object"
+          ? rawTask.project
+          : projects.find((p) => String(p._id) === String(rawTask.project));
 
-      const selectedProject = projects.find(
-        (p) => String(p._id) === String(rawTask.project),
-      );
-
-      const selectedOwners =
-        selectedTeam?.members?.filter((m) =>
-          rawTask.owners.map(String).includes(String(m._id)),
-        ) || [];
+      const selectedOwners = rawTask.owners?.[0]?.name
+        ? rawTask.owners // already populated ✅
+        : selectedTeam?.members?.filter((m) =>
+            rawTask.owners?.map(String).includes(String(m._id)),
+          ) || [];
 
       const newTask = {
         ...rawTask,
@@ -92,21 +93,65 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  // =========================
-  // 🔥 UPDATE TASK STATUS
-  // =========================
-  const updateTask = async (taskId, status) => {
+  // UPDATE TASK STATUS
+  const updateTask = async (taskId, payload) => {
     try {
-      const data = await updateTaskStatus(taskId, status);
+      // ✅ BUILD CLEAN PAYLOAD
+      const cleanPayload = {};
 
-      const updatedTask = data.task;
+      if (payload.name !== undefined) {
+        cleanPayload.name = payload.name;
+      }
 
+      if (payload.timeToComplete !== undefined) {
+        cleanPayload.timeToComplete = payload.timeToComplete;
+      }
+
+      if (payload.status !== undefined) {
+        cleanPayload.status = payload.status;
+      }
+
+      // ✅ ONLY send tags if it's a valid array
+      if (Array.isArray(payload.tags)) {
+        cleanPayload.tags = payload.tags;
+      }
+
+      const data = await updateTaskAPI(taskId, cleanPayload);
+
+      const rawTask = data.task;
+
+      // 🔥 NORMALIZATION
+      const selectedTeam =
+        typeof rawTask.team === "object"
+          ? rawTask.team
+          : teams?.find((t) => String(t._id) === String(rawTask.team));
+
+      const selectedProject =
+        typeof rawTask.project === "object"
+          ? rawTask.project
+          : projects?.find((p) => String(p._id) === String(rawTask.project));
+
+      const selectedOwners = rawTask.owners?.[0]?.name
+        ? rawTask.owners
+        : selectedTeam?.members?.filter((m) =>
+            rawTask.owners?.map(String).includes(String(m._id)),
+          ) || [];
+
+      const updatedTask = {
+        ...rawTask,
+        team: selectedTeam || rawTask.team,
+        project: selectedProject || rawTask.project,
+        owners: selectedOwners,
+      };
+
+      // ✅ UPDATE STATE
       setTasks((prev) => prev.map((t) => (t._id === taskId ? updatedTask : t)));
 
       fetchReports?.();
 
       return updatedTask;
     } catch (err) {
+      console.log("UPDATE ERROR:", err.response?.data);
       toast.error("Failed to update task");
       throw err;
     }
@@ -122,7 +167,7 @@ export const TaskProvider = ({ children }) => {
       setTasks((prev) => prev.filter((t) => t._id !== taskId));
 
       fetchReports?.();
-      
+
       toast.success("Task deleted");
     } catch (err) {
       toast.error("Failed to delete task");
