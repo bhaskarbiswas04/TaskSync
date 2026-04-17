@@ -2,6 +2,7 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import { useTasks } from "../context/TaskContext";
 import { useEffect } from "react";
 import { useUI } from "../context/UIContext";
+import { useReports } from "../context/ReportContext";
 
 import {
   Chart as ChartJS,
@@ -28,6 +29,7 @@ ChartJS.register(
 export default function ReportsPage() {
   const { tasks } = useTasks();
   const { triggerPageLoading } = useUI();
+  const { lastWeek, pending, closedStats } = useReports();
 
   useEffect(() => {
     triggerPageLoading(500);
@@ -42,14 +44,15 @@ export default function ReportsPage() {
     d.setDate(d.getDate() - i);
     return d.toDateString();
   });
-
+  
   const completedTasks = tasks.filter((t) => t.status === "Completed");
 
   const tasksPerDay = last7Days.map((day) => {
-    return completedTasks.filter(
-      (t) => new Date(t.updatedAt).toDateString() === day,
-    ).length;
+    return lastWeek.filter((t) => new Date(t.updatedAt).toDateString() === day)
+      .length;
   });
+
+
 
   const lastWeekData = {
     labels: last7Days.reverse(),
@@ -77,8 +80,8 @@ export default function ReportsPage() {
     datasets: [
       {
         label: "Days",
-        data: [totalPendingHours],
-        backgroundColor: "#f59e0b", // amber
+        data: [pending],
+        backgroundColor: "#f59e0b",
         borderRadius: 6,
       },
     ],
@@ -94,17 +97,11 @@ export default function ReportsPage() {
   });
 
   const teamData = {
-    labels: Object.keys(teamMap),
+    labels: Object.keys(closedStats.byTeam || {}),
     datasets: [
       {
-        data: Object.values(teamMap),
-        backgroundColor: [
-          "#3b82f6", 
-          "#10b981",
-          "#f59e0b", 
-          "#ef4444",
-          "#8b5cf6", 
-        ],
+        data: Object.values(closedStats.byTeam || {}),
+        backgroundColor: ["#3b82f6", "#10b981", "#f59e0b", "#ef4444"],
       },
     ],
   };
@@ -120,17 +117,11 @@ export default function ReportsPage() {
   });
 
   const ownerData = {
-    labels: Object.keys(ownerMap),
+    labels: Object.keys(closedStats.byOwner || {}),
     datasets: [
       {
-        data: Object.values(ownerMap),
-        backgroundColor: [
-          "#22c55e",
-          "#06b6d4",
-          "#f97316",
-          "#a855f7",
-          "#e11d48",
-        ],
+        data: Object.values(closedStats.byOwner || {}),
+        backgroundColor: ["#22c55e", "#06b6d4", "#f97316", "#a855f7"],
       },
     ],
   };

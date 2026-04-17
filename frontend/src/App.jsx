@@ -16,10 +16,10 @@ import { AuthProvider } from "./context/AuthContext";
 import { ProjectProvider } from "./context/ProjectContext";
 import { TaskProvider } from "./context/TaskContext";
 import { TeamProvider } from "./context/TeamContext";
+import { ReportProvider } from "./context/ReportContext";
 
 import PageLoader from "./components/PageLoader";
 
-// 🔥 MOVE useUI HERE (child of provider)
 function AppContent() {
   const { pageLoading } = useUI();
 
@@ -53,7 +53,6 @@ function AppContent() {
   );
 }
 
-// 🔥 ROOT APP
 function App() {
   return (
     <BrowserRouter>
@@ -62,7 +61,9 @@ function App() {
           <ProjectProvider>
             <TaskProvider>
               <TeamProvider>
-                <AppContent /> {/* ✅ FIX */}
+                <ReportProvider>
+                  <AppContent />
+                </ReportProvider>
               </TeamProvider>
             </TaskProvider>
           </ProjectProvider>
