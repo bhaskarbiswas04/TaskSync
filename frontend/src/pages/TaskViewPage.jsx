@@ -89,14 +89,14 @@ export default function TaskViewPage() {
             {/* EDIT BUTTON */}
             <button
               onClick={() => setShowEditModal(true)}
-              className="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded text-sm"
+              className="bg-cyan-500 hover:bg-cyan-600 px-4 py-2 rounded text-sm cursor-pointer text-black"
             >
               Edit Task
             </button>
 
             <button
               onClick={handleDelete}
-              className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm"
+              className="bg-red-400 hover:bg-red-500 px-4 py-2 rounded text-sm cursor-pointer text-black" 
             >
               Delete Task
             </button>
@@ -169,21 +169,21 @@ export default function TaskViewPage() {
             <div className="flex gap-2">
               <button
                 onClick={() => handleStatusChange("To Do")}
-                className="bg-gray-700 px-3 py-1 rounded text-sm"
+                className="bg-gray-700 px-3 py-1 rounded text-sm cursor-pointer"
               >
                 To Do
               </button>
 
               <button
                 onClick={() => handleStatusChange("In Progress")}
-                className="bg-blue-600 px-3 py-1 rounded text-sm"
+                className="bg-blue-600 px-3 py-1 rounded text-sm cursor-pointer"
               >
                 In Progress
               </button>
 
               <button
                 onClick={() => handleStatusChange("Completed")}
-                className="bg-green-600 px-3 py-1 rounded text-sm"
+                className="bg-green-600 px-3 py-1 rounded text-sm cursor-pointer"
               >
                 Complete
               </button>
