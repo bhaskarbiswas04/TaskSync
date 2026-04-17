@@ -5,12 +5,13 @@ import toast from "react-hot-toast";
 
 export default function CreateTeamModal({ isOpen, onClose, onSuccess }) {
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await API.post("/teams", { name });
+      const res = await API.post("/teams", { name, description });
 
       toast.success("Team created");
       onSuccess(res.data.team);
@@ -32,7 +33,14 @@ export default function CreateTeamModal({ isOpen, onClose, onSuccess }) {
           className="w-full p-2 bg-gray-800 text-white rounded"
         />
 
-        <button className="w-full bg-blue-600 p-2 rounded">Create</button>
+        <input
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full p-2 bg-gray-800 text-white rounded"
+        />
+
+        <button className="w-full bg-blue-600 p-2 rounded cursor-pointer">Create</button>
       </form>
     </Modal>
   );

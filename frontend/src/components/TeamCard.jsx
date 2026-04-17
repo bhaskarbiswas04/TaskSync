@@ -8,7 +8,11 @@ export default function TeamCard({ team }) {
       onClick={() => navigate(`/teams/${team._id}`)}
       className="cursor-pointer bg-white/5 backdrop-blur-lg border border-white/10 p-5 rounded-xl hover:scale-[1.02] hover:border-cyan-500 transition shadow-lg"
     >
-      <h3 className="text-lg font-semibold text-white">{team.name}</h3>
+      <h3 className="text-xl font-semibold text-white">{team.name}</h3>
+      <p className="text-xs">
+        <span className="text-cyan-400">Description:</span>{" "}
+        {team.description ? team.description : "N/A"}
+      </p>
 
       {/* Members Preview */}
       <div className="flex mt-3 -space-x-2">

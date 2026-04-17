@@ -43,7 +43,7 @@ export default function TeamsPage() {
       <div className="grid md:grid-cols-3 gap-5 px-6">
         {filteredTeams.length === 0 ? (
           <p className="text-gray-400 col-span-full text-center">
-            No teams found
+            No teams found!
           </p>
         ) : (
           filteredTeams.map((team) => <TeamCard key={team._id} team={team} />)
