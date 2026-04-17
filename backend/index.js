@@ -7,7 +7,8 @@ import connectDB from "./src/config/database.connect.js";
 import userRoutes from "./src/routes/userRoutes.js"
 import teamRoutes from "./src/routes/teamRoutes.js"
 import projectRoutes from "./src/routes/projectRoutes.js"
-import taskRoutes from "./src/routes/taskRoutes.js"
+import taskRoutes from "./src/routes/taskRoutes.js";
+import reportRoutes from "./src/routes/reportRoutes.js"
 
 dotenv.config(); //--load env variables
 
@@ -50,5 +51,6 @@ app.get("/", (req, res)=>{
 //routes
 app.use("/api/auth", userRoutes);
 app.use("/api/teams", teamRoutes);
-app.use("/api/projects", projectRoutes)
-app.use("/api/tasks", taskRoutes)
+app.use("/api/projects", projectRoutes);
+app.use("/api/tasks", taskRoutes);
+app.use("/api/reports", reportRoutes);
