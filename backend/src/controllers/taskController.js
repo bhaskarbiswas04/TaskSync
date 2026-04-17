@@ -97,14 +97,26 @@ export const updateTaskById = async (req, res)=>{
             });
         }
 
-        Object.assign(task, req.body);
+        const allowedFields = ["name", "status", "timeToComplete", "tags"];
+
+        allowedFields.forEach((field) => {
+          if (req.body[field] !== undefined) {
+            task[field] = req.body[field];
+          }
+        });
 
         await task.save();
 
+        // 🔥 POPULATE UPDATED TASK
+        const populatedTask = await Task.findById(task._id)
+          .populate("owners", "name email")
+          .populate("project", "name")
+          .populate("team", "name");
+
         return res.status(200).json({
-            message: "Task Updated",
-            task,
-        })
+          message: "Task Updated",
+          task: populatedTask,
+        });
     } catch (error) {
         res.status(500).json({
           message: "Error updating task",
