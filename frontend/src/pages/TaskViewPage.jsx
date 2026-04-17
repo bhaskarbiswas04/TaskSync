@@ -86,7 +86,7 @@ export default function TaskViewPage() {
           </h1>
 
           <div className="flex gap-3">
-            {/* ✅ EDIT BUTTON */}
+            {/* EDIT BUTTON */}
             <button
               onClick={() => setShowEditModal(true)}
               className="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded text-sm"
@@ -159,7 +159,9 @@ export default function TaskViewPage() {
           <div className="flex items-center justify-between mt-6">
             <div>
               <span className="text-gray-500">Status:</span>{" "}
-              <span className="bg-green-600 px-2 py-1 rounded text-xs">
+              <span
+                className={` ${task.status === "Completed" ? "bg-green-600" : "bg-cyan-600"} px-2 py-1 rounded text-xs`}
+              >
                 {task.status}
               </span>
             </div>
@@ -190,7 +192,7 @@ export default function TaskViewPage() {
         </div>
       </div>
 
-      {/* ✅ EDIT MODAL */}
+      {/* EDIT MODAL */}
       <EditTaskModal
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}

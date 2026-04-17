@@ -20,6 +20,19 @@ import { ReportProvider } from "./context/ReportContext";
 
 import PageLoader from "./components/PageLoader";
 
+// Wrapper for all protected providers
+function AppProviders({ children }) {
+  return (
+    <ProjectProvider>
+      <TaskProvider>
+        <TeamProvider>
+          <ReportProvider>{children}</ReportProvider>
+        </TeamProvider>
+      </TaskProvider>
+    </ProjectProvider>
+  );
+}
+
 function AppContent() {
   const { pageLoading } = useUI();
 
@@ -28,26 +41,88 @@ function AppContent() {
       {pageLoading && <PageLoader />}
 
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<h1>Landing Page</h1>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
 
+        {/* Protected Routes */}
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <DashboardPage />
+              <AppProviders>
+                <DashboardPage />
+              </AppProviders>
             </ProtectedRoute>
           }
         />
 
-        <Route path="/projects" element={<ProjectsPage />} />
-        <Route path="/projects/:projectId" element={<ProjectViewPage />} />
+        <Route
+          path="/projects"
+          element={
+            <ProtectedRoute>
+              <AppProviders>
+                <ProjectsPage />
+              </AppProviders>
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/teams" element={<TeamsPage />} />
-        <Route path="/teams/:teamId" element={<TeamViewPage />} />
-        <Route path="/tasks/:taskId" element={<TaskViewPage />} />
-        <Route path="/reports" element={<ReportsPage />} />
+        <Route
+          path="/projects/:projectId"
+          element={
+            <ProtectedRoute>
+              <AppProviders>
+                <ProjectViewPage />
+              </AppProviders>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/teams"
+          element={
+            <ProtectedRoute>
+              <AppProviders>
+                <TeamsPage />
+              </AppProviders>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/teams/:teamId"
+          element={
+            <ProtectedRoute>
+              <AppProviders>
+                <TeamViewPage />
+              </AppProviders>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tasks/:taskId"
+          element={
+            <ProtectedRoute>
+              <AppProviders>
+                <TaskViewPage />
+              </AppProviders>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute>
+              <AppProviders>
+                <ReportsPage />
+              </AppProviders>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );
@@ -58,15 +133,7 @@ function App() {
     <BrowserRouter>
       <UIProvider>
         <AuthProvider>
-          <ReportProvider>
-            <ProjectProvider>
-              <TaskProvider>
-                <TeamProvider>
-                  <AppContent />
-                </TeamProvider>
-              </TaskProvider>
-            </ProjectProvider>
-          </ReportProvider>
+          <AppContent />
         </AuthProvider>
       </UIProvider>
     </BrowserRouter>

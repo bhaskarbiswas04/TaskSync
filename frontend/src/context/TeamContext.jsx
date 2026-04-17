@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { getAllTeams, addMembersToTeam } from "../api/teamApi";
+import { useAuth } from "./AuthContext";
 import toast from "react-hot-toast";
 
 const TeamContext = createContext();
@@ -7,9 +8,13 @@ const TeamContext = createContext();
 export const TeamProvider = ({ children }) => {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
+    const { user } = useAuth();
+  
 
   // Fetch Teams
   const fetchTeams = async () => {
+    if (!user?._id) return;
+
     try {
       setLoading(true);
       const data = await getAllTeams();
@@ -39,10 +44,12 @@ export const TeamProvider = ({ children }) => {
     }
   };
 
-  // 🔥 Initial Load
+  
   useEffect(() => {
-    fetchTeams();
-  }, []);
+    if (user?._id) {
+      fetchTeams();
+    }
+  }, [user?._id]);
 
   return (
     <TeamContext.Provider

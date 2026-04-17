@@ -13,6 +13,8 @@ export const ProjectProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchProjects = async () => {
+    if (!user?._id) return;
+
     try {
       setLoading(true);
       const data = await getProjects();
@@ -25,8 +27,10 @@ export const ProjectProvider = ({ children }) => {
   };
 
   useEffect(() => {
+  if (user?._id) {
     fetchProjects();
-  }, []);
+  }
+}, [user?._id]);
 
   return (
     <ProjectContext.Provider
