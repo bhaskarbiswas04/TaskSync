@@ -1,18 +1,15 @@
 import { useState, useEffect } from "react";
 import Modal from "./Modal";
-import API_BASE_URL from "../api/axios";
 import toast from "react-hot-toast";
 
 import { useProjects } from "../context/ProjectContext";
 import { useTeams } from "../context/TeamContext";
+import { useTasks } from "../context/TaskContext";
 
-export default function CreateTaskModal({
-  isOpen,
-  onClose,
-  onSuccess,
-}) {
+export default function CreateTaskModal({ isOpen, onClose, onSuccess }) {
   const { projects, fetchProjects } = useProjects();
   const { teams } = useTeams();
+  const { createTask } = useTasks();
 
   const initialState = {
     name: "",
@@ -31,7 +28,7 @@ export default function CreateTaskModal({
   useEffect(() => {
     if (isOpen) {
       setForm(initialState);
-      fetchProjects(); // 🔥 ensures latest projects
+      fetchProjects();
     }
   }, [isOpen]);
 
@@ -43,6 +40,7 @@ export default function CreateTaskModal({
         ...form,
         team: value,
         project: "", // reset project
+        owners: [], // 🔥 reset owners also
       });
     } else {
       setForm({ ...form, [name]: value });
@@ -58,7 +56,6 @@ export default function CreateTaskModal({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation
     if (!form.name || !form.team || !form.project || form.owners.length === 0) {
       return toast.error("Please fill all required fields");
     }
@@ -70,11 +67,12 @@ export default function CreateTaskModal({
         timeToComplete: Number(form.timeToComplete) || 0,
       };
 
-      const res = await API_BASE_URL.post("/tasks", payload);
+      const newTask = await createTask(payload); // ✅ CONTEXT CALL
 
       toast.success("Task Created");
 
-      onSuccess(res.data.task);
+      onSuccess(newTask); // already normalized from context
+
       onClose();
     } catch (err) {
       console.log(err);
@@ -85,13 +83,11 @@ export default function CreateTaskModal({
   // Filter projects by selected team
   const filteredProjects = projects.filter((p) => {
     const teamId = typeof p.team === "object" ? p.team._id : p.team;
-
     return teamId === form.team;
   });
+
   // Get selected team
   const selectedTeam = teams.find((t) => t._id === form.team);
-
-  console.log(form);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -103,7 +99,7 @@ export default function CreateTaskModal({
         onSubmit={handleSubmit}
         className="grid grid-cols-1 md:grid-cols-2 gap-4"
       >
-        {/* Task Name (full width) */}
+        {/* Task Name */}
         <div className="md:col-span-2">
           <input
             name="name"
@@ -144,11 +140,10 @@ export default function CreateTaskModal({
           ))}
         </select>
 
-        {/* Owners (full width) */}
+        {/* Owners */}
         <div className="md:col-span-2">
           <label className="text-sm text-gray-400">Assign Owners</label>
 
-          {/* Helper Text */}
           {!form.team && (
             <p className="text-xs text-yellow-400 mt-1">
               ⚠ Select a team first to choose owners
@@ -159,7 +154,7 @@ export default function CreateTaskModal({
             multiple
             value={form.owners}
             onChange={handleOwnerChange}
-            disabled={!form.team} // 🔥 disable until team selected
+            disabled={!form.team}
             className={`w-full p-2 rounded mt-1 h-28 ${
               !form.team
                 ? "bg-gray-700 text-gray-500 cursor-not-allowed"
@@ -173,35 +168,6 @@ export default function CreateTaskModal({
             ))}
           </select>
         </div>
-
-        {/* <div className="space-y-2 max-h-32 overflow-y-auto bg-gray-800 p-2 rounded">
-          {selectedTeam?.members?.map((member) => (
-            <label
-              key={member._id}
-              className="flex items-center gap-2 text-white"
-            >
-              <input
-                type="checkbox"
-                value={member._id}
-                checked={form.owners.includes(member._id)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setForm({
-                      ...form,
-                      owners: [...form.owners, member._id],
-                    });
-                  } else {
-                    setForm({
-                      ...form,
-                      owners: form.owners.filter((id) => id !== member._id),
-                    });
-                  }
-                }}
-              />
-              {member.name}
-            </label>
-          ))}
-        </div> */}
 
         {/* Tags */}
         <input
@@ -249,14 +215,11 @@ export default function CreateTaskModal({
           <option value="High">High</option>
         </select>
 
-        {/* Button (full width) */}
-
-        <div className="md:col-span-2">
-          <div className="flex justify-center">
-            <button className="w-30 bg-green-600 p-2 rounded cursor-pointer">
-              Create Task
-            </button>
-          </div>
+        {/* Button */}
+        <div className="md:col-span-2 flex justify-center">
+          <button className="w-30 bg-green-600 p-2 rounded cursor-pointer hover:bg-green-700">
+            Create Task
+          </button>
         </div>
       </form>
     </Modal>

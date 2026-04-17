@@ -3,18 +3,13 @@ import { useTasks } from "../context/TaskContext";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { useState, useEffect } from "react";
 import { useUI } from "../context/UIContext";
-import { useProjects } from "../context/ProjectContext";
-import { useTeams } from "../context/TeamContext";
-import API_BASE_URL from "../api/axios";
 import toast from "react-hot-toast";
 
 export default function TaskViewPage() {
   const { taskId } = useParams();
   const navigate = useNavigate();
-  const { projects } = useProjects();
-  const { teams } = useTeams();
 
-  const { tasks, setTasks } = useTasks();
+  const { tasks, updateTask, deleteTask } = useTasks(); // ✅ USE CONTEXT
   const { triggerPageLoading } = useUI();
 
   const [task, setTask] = useState(null);
@@ -38,43 +33,27 @@ export default function TaskViewPage() {
     );
   }
 
-  // 🔥 UPDATE STATUS
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this task?",
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await deleteTask(task._id);
+
+      navigate(-1);
+    } catch (err) {
+      toast.error("Failed to delete task");
+    }
+  };
+
   const handleStatusChange = async (newStatus) => {
     try {
-      const res = await API_BASE_URL.post(`/tasks/${task._id}`, {
-        status: newStatus,
-      });
+      const updatedTask = await updateTask(task._id, newStatus);
 
-      const rawTask = res.data.task;
-
-      // 🔥 NORMALIZATION
-
-      const selectedTeam = teams.find(
-        (t) => String(t._id) === String(rawTask.team),
-      );
-
-      const selectedProject = projects.find(
-        (p) => String(p._id) === String(rawTask.project),
-      );
-
-      const selectedOwners =
-        selectedTeam?.members?.filter((m) =>
-          rawTask.owners.map(String).includes(String(m._id)),
-        ) || [];
-
-      const updatedTask = {
-        ...rawTask,
-        team: selectedTeam || rawTask.team,
-        project: selectedProject || rawTask.project,
-        owners: selectedOwners,
-      };
-
-      // 🔥 UPDATE GLOBAL STATE
-      setTasks((prev) =>
-        prev.map((t) => (t._id === task._id ? updatedTask : t)),
-      );
-
-      setTask(updatedTask);
+      setTask(updatedTask); // update local view
 
       toast.success("Task updated");
     } catch (err) {
@@ -87,46 +66,64 @@ export default function TaskViewPage() {
       <div className="p-6 max-w-5xl mx-auto">
         {/* HEADER */}
         <div className="mb-6">
-          <button
-            onClick={() => navigate(-1)}
-            className="text-cyan-400 text-sm mb-2 cursor-pointer"
-          >
-            ← Back
-          </button>
 
-          <h1 className="text-3xl font-bold text-white text-center">
-            Task: {task.name}
-          </h1>
+          <div className="flex justify-between items-center mb-6">
+            <button
+              onClick={() => navigate(-1)}
+              className="text-cyan-400 text-sm cursor-pointer"
+            >
+              ← Back
+            </button>
+
+            <h1 className="text-3xl font-bold text-white text-center">
+              Task: {task.name}
+            </h1>
+
+            <button
+              onClick={handleDelete}
+              className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm cursor-pointer"
+            >
+              Delete Task
+            </button>
+          </div>
         </div>
 
         {/* DETAILS CARD */}
         <div className="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4">
           <p className="text-gray-300">
-            <span className="text-gray-500">Project:</span> {task.project?.name}
+            <span className="text-gray-500">Project:</span>{" "}
+            {task.project?.name || "N/A"}
           </p>
 
           <p className="text-gray-300">
-            <span className="text-gray-500">Team:</span> {task.team?.name}
+            <span className="text-gray-500">Team:</span>{" "}
+            {task.team?.name || "N/A"}
           </p>
 
           <div>
             <span className="text-gray-500">Owners:</span>
             <div className="flex gap-2 mt-1 flex-wrap">
-              {task.owners?.map((o) => (
-                <span
-                  key={o._id}
-                  className="bg-gray-700 px-2 py-1 rounded text-xs"
-                >
-                  {o.name}
+              {task.owners?.length > 0 ? (
+                task.owners.map((o) => (
+                  <span
+                    key={o._id}
+                    className="bg-gray-700 px-2 py-1 rounded text-xs"
+                  >
+                    {o.name}
+                  </span>
+                ))
+              ) : (
+                <span className="text-gray-400 text-xs italic">
+                  No owners assigned
                 </span>
-              ))}
+              )}
             </div>
           </div>
 
           <div>
             <span className="text-gray-500">Tags:</span>
             <div className="flex gap-2 mt-1 flex-wrap">
-              {task.tags && task.tags.length > 0 ? (
+              {task.tags?.length > 0 ? (
                 task.tags.map((tag, i) => (
                   <span
                     key={i}
@@ -137,15 +134,15 @@ export default function TaskViewPage() {
                 ))
               ) : (
                 <span className="text-gray-400 text-xs italic">
-                  No Tags available.
+                  No tags available
                 </span>
               )}
             </div>
           </div>
 
           <p className="text-gray-300">
-            <span className="text-gray-500">Due:</span> {task.timeToComplete}{" "}
-            days
+            <span className="text-gray-500">Time:</span>{" "}
+            {task.timeToComplete || 0} days
           </p>
 
           {/* STATUS */}
@@ -153,7 +150,13 @@ export default function TaskViewPage() {
             <div>
               <span className="text-gray-500">Status:</span>{" "}
               <span
-                className={` ${task.status === "Completed" ? "bg-green-600" : "bg-cyan-600"} px-2 py-1 rounded text-xs`}
+                className={`px-2 py-1 rounded text-xs ${
+                  task.status === "Completed"
+                    ? "bg-green-600"
+                    : task.status === "In Progress"
+                      ? "bg-blue-600"
+                      : "bg-gray-600"
+                }`}
               >
                 {task.status}
               </span>
@@ -161,7 +164,8 @@ export default function TaskViewPage() {
 
             {/* ACTIONS */}
             <div className="flex gap-2">
-              <p className="text-gray-400">Update :</p>
+              <p className="text-gray-400">Update:</p>
+
               <button
                 onClick={() => handleStatusChange("To Do")}
                 className="bg-gray-700 px-3 py-1 rounded text-sm cursor-pointer"

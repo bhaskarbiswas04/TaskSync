@@ -12,7 +12,7 @@ import CreateTaskModal from "../components/CreateTaskModal";
 
 export default function DashboardPage() {
   const { projects, setProjects } = useProjects();
-  const { tasks, setTasks } = useTasks();
+  const { tasks } = useTasks();
   const { teams } = useTeams();
 
   const { triggerPageLoading, searchQuery } = useUI();
@@ -34,12 +34,8 @@ export default function DashboardPage() {
         isOpen={showProjectModal}
         onClose={() => setShowProjectModal(false)}
         teams={teams}
-        onSuccess={(newProject) => {
-          triggerPageLoading(); // 🔥 show loader
-
-          setTimeout(() => {
-            setProjects((prev) => [newProject, ...prev]);
-          }, 200); // small delay for smooth UX
+        onSuccess={() => {
+          triggerPageLoading();
         }}
       />
 
@@ -48,12 +44,8 @@ export default function DashboardPage() {
         onClose={() => setShowTaskModal(false)}
         teams={teams}
         projects={projects}
-        onSuccess={(newTask) => {
+        onSuccess={() => {
           triggerPageLoading();
-
-          setTimeout(() => {
-            setTasks((prev) => [newTask, ...prev]);
-          }, 200);
         }}
       />
 

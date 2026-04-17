@@ -58,15 +58,15 @@ function App() {
     <BrowserRouter>
       <UIProvider>
         <AuthProvider>
-          <ProjectProvider>
-            <TaskProvider>
-              <TeamProvider>
-                <ReportProvider>
+          <ReportProvider>
+            <ProjectProvider>
+              <TaskProvider>
+                <TeamProvider>
                   <AppContent />
-                </ReportProvider>
-              </TeamProvider>
-            </TaskProvider>
-          </ProjectProvider>
+                </TeamProvider>
+              </TaskProvider>
+            </ProjectProvider>
+          </ReportProvider>
         </AuthProvider>
       </UIProvider>
     </BrowserRouter>
