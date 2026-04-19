@@ -1,12 +1,10 @@
-# 🚀 TaskSync — MERN Stack Project Management System
+# 🚀 TaskSync — Project Management System
 
 TaskSync is a full-featured project and task management application built using the MERN stack. It helps teams collaborate, manage projects, assign tasks, and track progress with real-time updates and insightful reports.
 
 ---
 
-## 🌐 Live Demo
-
-👉 https://task-sync-client.vercel.app
+## 🌐 Experience the Application Live:  https://task-sync-client.vercel.app
 
 ---
 
@@ -235,12 +233,6 @@ npm run dev
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to fork the repo and submit a pull request.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
 
 ---
 
