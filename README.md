@@ -177,7 +177,3 @@ npm run dev
 MERN Stack Developer
 
 ---
-
-## ⭐ Support
-
-If you like this project, give it a ⭐ on GitHub — it helps a lot!
