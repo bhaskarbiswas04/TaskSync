@@ -13,7 +13,7 @@ export default function TeamViewPage() {
   const { teamId } = useParams();
   const { teams } = useTeams();
   const { projects } = useProjects();
-  const { triggerPageLoading } = useUI(); // ✅ NEW
+  const { triggerPageLoading } = useUI(); //
 
   const [showModal, setShowModal] = useState(false);
 
@@ -70,7 +70,7 @@ export default function TeamViewPage() {
 
           <button
             onClick={() => setShowModal(true)}
-            className="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white"
+            className="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white cursor-pointer"
           >
             + Add Member
           </button>
