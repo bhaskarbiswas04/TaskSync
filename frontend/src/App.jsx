@@ -10,6 +10,7 @@ import TeamsPage from "./pages/TeamsPage";
 import TeamViewPage from "./pages/TeamViewPage";
 import TaskViewPage from "./pages/TaskViewPage";
 import ReportsPage from "./pages/ReportsPage";
+import SettingsPage from "./pages/SettingsPage";
 
 import { UIProvider, useUI } from "./context/UIContext";
 import { AuthProvider } from "./context/AuthContext";
@@ -119,6 +120,17 @@ function AppContent() {
             <ProtectedRoute>
               <AppProviders>
                 <ReportsPage />
+              </AppProviders>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <AppProviders>
+                <SettingsPage />
               </AppProviders>
             </ProtectedRoute>
           }

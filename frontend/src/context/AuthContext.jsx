@@ -53,11 +53,17 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
       };
 
+      const updateUser = (userData) => {
+        setUser((prev) => ({ ...prev, ...userData }));
+      };
+
     return (
-        <AuthContext.Provider value={{user, signup, login, logout , loading}}>
-            { children }
-        </AuthContext.Provider>
-    )
+      <AuthContext.Provider
+        value={{ user, signup, login, logout, loading, updateUser }}
+      >
+        {children}
+      </AuthContext.Provider>
+    );
 };
 
 export const useAuth = () => useContext(AuthContext);
