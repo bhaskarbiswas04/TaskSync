@@ -1,4 +1,4 @@
-# 🚀 TaskSync — Project Management System
+# TaskSync — Project Management System
 
 TaskSync is a full-featured project and task management application built using the MERN stack. It helps teams collaborate, manage projects, assign tasks, and track progress with real-time updates and insightful reports.
 
@@ -51,7 +51,7 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-### 📍 Search Functionality
+### Search Functionality
 
 * Global search across:
 
@@ -62,7 +62,7 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-### 📍 Reports & Analytics
+### Reports & Analytics
 
 * Tasks completed in the last 7 days
 * Total pending work (hours/days)
@@ -75,7 +75,7 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-### 📍 Settings Page
+### Settings Page
 
 * Update profile (name, email)
 * Change password
@@ -83,7 +83,7 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-### 📍 UI/UX
+### UI/UX
 
 * Fully responsive modern UI
 * Smooth transitions and loading states
@@ -91,9 +91,9 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-## 🛠️ Tech Stack
+## 📍 Tech Stack
 
-### 📍 Frontend
+### Frontend
 
 * React.js
 * Tailwind CSS
@@ -103,7 +103,7 @@ TaskSync is a full-featured project and task management application built using 
 * Chart.js (Data Visualization)
 * React Hot Toast
 
-### 📍 Backend
+### Backend
 
 * Node.js
 * Express.js
@@ -171,7 +171,7 @@ npm run dev
 
 ---
 
-## 👨‍💻 Author
+## 📍 Author
 
 **Bhaskar Biswas**
 MERN Stack Developer
