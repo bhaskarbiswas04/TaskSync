@@ -51,7 +51,7 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-### Search Functionality
+### 📍 Search Functionality
 
 * Global search across:
 
@@ -62,7 +62,7 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-### Reports & Analytics
+### 📍 Reports & Analytics
 
 * Tasks completed in the last 7 days
 * Total pending work (hours/days)
@@ -75,20 +75,15 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-### ⚙️ Settings Page
+### 📍 Settings Page
 
 * Update profile (name, email)
 * Change password
-* Set preferences:
-
-  * Default task priority
-  * Default task status
-  * Theme (dark/light)
 * Delete account (with confirmation)
 
 ---
 
-### 🎨 UI/UX
+### 📍 UI/UX
 
 * Fully responsive modern UI
 * Dark theme by default
@@ -99,7 +94,7 @@ TaskSync is a full-featured project and task management application built using 
 
 ## 🛠️ Tech Stack
 
-### Frontend
+### 📍 Frontend
 
 * React.js
 * Tailwind CSS
@@ -109,7 +104,7 @@ TaskSync is a full-featured project and task management application built using 
 * Chart.js (Data Visualization)
 * React Hot Toast
 
-### Backend
+### 📍 Backend
 
 * Node.js
 * Express.js
@@ -119,49 +114,7 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-## 📂 Project Structure
-
-```bash
-TaskSync/
-│
-├── client/                 # Frontend (React)
-│   ├── src/
-│   │   ├── api/
-│   │   ├── components/
-│   │   ├── context/
-│   │   ├── layouts/
-│   │   ├── pages/
-│   │   └── routes/
-│
-├── server/                 # Backend (Node + Express)
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── middlewares/
-│   └── config/
-```
-
----
-
-## ⚙️ Environment Variables
-
-### Backend (.env)
-
-```env
-PORT=5000
-MONGO_URI=your_mongodb_connection
-JWT_SECRET=your_secret_key
-```
-
-### Frontend (.env)
-
-```env
-VITE_API_URL=http://localhost:5000/api
-```
-
----
-
-## 🚀 Installation & Setup
+## 📍 Installation & Setup
 
 ### 1. Clone the repository
 
@@ -175,7 +128,7 @@ cd tasksync
 ### 2. Backend Setup
 
 ```bash
-cd server
+cd backend
 npm install
 npm run dev
 ```
@@ -185,14 +138,14 @@ npm run dev
 ### 3. Frontend Setup
 
 ```bash
-cd client
+cd frontend
 npm install
 npm run dev
 ```
 
 ---
 
-## 🔐 API Endpoints (Sample)
+## 📍 API Endpoints (Sample)
 
 ### Auth
 
@@ -215,24 +168,7 @@ npm run dev
 
 * POST `/api/settings/profile`
 * POST `/api/settings/password`
-* POST `/api/settings/preferences`
 * DELETE `/api/settings/delete`
-
----
-
-## 📈 Future Improvements
-
-* Real-time updates using WebSockets
-* Email notifications
-* Drag-and-drop task board (Kanban)
-* File attachments in tasks
-* Role-based access control (Admin/User)
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to fork the repo and submit a pull request.
 
 ---
 
