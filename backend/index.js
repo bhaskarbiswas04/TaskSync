@@ -8,7 +8,8 @@ import userRoutes from "./src/routes/userRoutes.js"
 import teamRoutes from "./src/routes/teamRoutes.js"
 import projectRoutes from "./src/routes/projectRoutes.js"
 import taskRoutes from "./src/routes/taskRoutes.js";
-import reportRoutes from "./src/routes/reportRoutes.js"
+import reportRoutes from "./src/routes/reportRoutes.js";
+import settingRoutes from "./src/routes/settingRoutes.js"
 
 dotenv.config(); //--load env variables
 
@@ -54,3 +55,4 @@ app.use("/api/teams", teamRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/reports", reportRoutes);
+app.use("/api/settings", settingRoutes);
