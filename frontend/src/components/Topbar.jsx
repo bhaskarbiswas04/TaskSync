@@ -26,7 +26,7 @@ export default function Topbar() {
         {shouldShowSearch ? (
           <input
             type="text"
-            placeholder="Search projects..."
+            placeholder="Search by project, description, team..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="bg-white/10 border border-white/20 text-white px-4 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
