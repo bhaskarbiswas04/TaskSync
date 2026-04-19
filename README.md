@@ -8,9 +8,9 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-## 📌 Features
+## 📍 Features
 
-### 👥 Authentication & User Management
+### Authentication & User Management
 
 * Secure login & signup (JWT-based authentication)
 * Protected routes for authenticated users
@@ -19,7 +19,7 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-### 📁 Project Management
+### Project Management
 
 * Create, update, and view projects
 * Assign teams to projects
@@ -28,7 +28,7 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-### 👨‍👩‍👧‍👦 Team Management
+### Team Management
 
 * Create and manage teams
 * Add/remove members
@@ -36,7 +36,7 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-### ✅ Task Management
+### Task Management
 
 * Create tasks with:
 
@@ -51,7 +51,7 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-### 🔍 Search Functionality
+### Search Functionality
 
 * Global search across:
 
@@ -62,7 +62,7 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-### 📊 Reports & Analytics
+### Reports & Analytics
 
 * Tasks completed in the last 7 days
 * Total pending work (hours/days)
