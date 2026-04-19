@@ -86,7 +86,6 @@ TaskSync is a full-featured project and task management application built using 
 ### 📍 UI/UX
 
 * Fully responsive modern UI
-* Dark theme by default
 * Smooth transitions and loading states
 * Clean dashboard layout
 
