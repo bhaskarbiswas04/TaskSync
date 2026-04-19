@@ -1,7 +1,7 @@
 import { User } from "../models/User.model.js";
 import bcrypt from "bcryptjs";
 
-// 🔥 UPDATE PROFILE
+// UPDATE PROFILE
 export const updateProfile = async (req, res) => {
   try {
     const { name, email } = req.body;
@@ -19,7 +19,7 @@ export const updateProfile = async (req, res) => {
   }
 };
 
-// 🔐 CHANGE PASSWORD
+// CHANGE PASSWORD
 export const changePassword = async (req, res) => {
   try {
     const { oldPassword, newPassword } = req.body;
@@ -40,25 +40,7 @@ export const changePassword = async (req, res) => {
   }
 };
 
-// ⚙️ UPDATE PREFERENCES
-export const updatePreferences = async (req, res) => {
-  try {
-    const user = await User.findById(req.user._id);
-
-    user.preferences = {
-      ...user.preferences,
-      ...req.body,
-    };
-
-    await user.save();
-
-    res.json({ preferences: user.preferences });
-  } catch {
-    res.status(500).json({ message: "Error updating preferences" });
-  }
-};
-
-// ☠️ DELETE ACCOUNT
+// DELETE ACCOUNT
 export const deleteAccount = async (req, res) => {
   try {
     await User.findByIdAndDelete(req.user._id);
