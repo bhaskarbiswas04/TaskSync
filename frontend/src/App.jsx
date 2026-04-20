@@ -11,6 +11,7 @@ import TeamViewPage from "./pages/TeamViewPage";
 import TaskViewPage from "./pages/TaskViewPage";
 import ReportsPage from "./pages/ReportsPage";
 import SettingsPage from "./pages/SettingsPage";
+import LandingPage from "./pages/LandingPage";
 
 import { UIProvider, useUI } from "./context/UIContext";
 import { AuthProvider } from "./context/AuthContext";
@@ -43,7 +44,7 @@ function AppContent() {
 
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<h1>Landing Page</h1>} />
+        <Route path="/" element={<LandingPage/>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
 
