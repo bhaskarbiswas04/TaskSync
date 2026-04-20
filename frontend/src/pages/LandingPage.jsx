@@ -115,7 +115,7 @@ export default function LandingPage() {
       {/* CTA */}
       <section className="text-center py-20 bg-white/5 border-t border-white/10">
         <h2 className="text-3xl font-bold">
-          Ready to boost your productivity?
+          Ready to boost productivity?
         </h2>
 
         <button
