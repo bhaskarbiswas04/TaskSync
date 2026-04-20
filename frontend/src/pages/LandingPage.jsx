@@ -48,13 +48,6 @@ export default function LandingPage() {
           >
             Start for Free
           </button>
-
-          <button
-            onClick={() => navigate("/login")}
-            className="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-lg transition"
-          >
-            Login
-          </button>
         </div>
       </section>
 
