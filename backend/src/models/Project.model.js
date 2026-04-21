@@ -13,12 +13,6 @@ const projectSchema = new mongoose.Schema(
       default: "",
     },
 
-    team: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Team",
-      required: true,
-    },
-
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
