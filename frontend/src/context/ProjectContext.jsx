@@ -39,7 +39,7 @@ export const ProjectProvider = ({ children }) => {
 
   useEffect(() => {
     if (user?._id) {
-      fetchProjects();
+      fetchAllProjects();
     }
   }, [user?._id]);
 
@@ -48,7 +48,6 @@ export const ProjectProvider = ({ children }) => {
       value={{ 
         projects, 
         setProjects, 
-        fetchProjects, 
         fetchAllProjects, // Added to Provider
         loading 
       }}
