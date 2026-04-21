@@ -14,7 +14,6 @@ export const createProject = async (req, res) => {
     const project = await Project.create({
       name,
       description,
-      team,
       createdBy: req.user._id,
     });
 
