@@ -13,3 +13,8 @@ export const createProject = async (projectData) => {
     throw error;
   }
 };
+
+export const getAllProjects = async () => {
+  const res = await API_BASE_URL.get("/projects/all");
+  return res.data;
+};

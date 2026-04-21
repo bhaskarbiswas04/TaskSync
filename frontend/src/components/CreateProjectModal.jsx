@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // 1. Import useNavigate
 import Modal from "./Modal";
 import toast from "react-hot-toast";
 import { createProject } from "../api/projectsApi";
@@ -7,6 +8,7 @@ import { useProjects } from "../context/ProjectContext";
 
 export default function CreateProjectModal({ isOpen, onClose }) {
   const { setProjects } = useProjects();
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     name: "",
@@ -29,16 +31,21 @@ export default function CreateProjectModal({ isOpen, onClose }) {
         ...data.project,
       };
 
-      // ✅ Update global state instantly
+      // Update global state instantly
       setProjects((prev) => [newProject, ...prev]);
 
-      // ✅ Reset form
+      // Reset form
       setForm({
         name: "",
         description: "",
       });
 
       onClose();
+
+      // 3. Navigate the user to the projects page
+      // Adjust the path "/projects" to match your actual route
+      navigate("/projects"); 
+      
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to create project");
     }

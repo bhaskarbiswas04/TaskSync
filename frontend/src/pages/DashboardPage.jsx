@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Added useEffect
 import DashboardLayout from "../layouts/DashboardLayout";
 import ProjectCard from "../components/dashboard-comps/ProjectCard";
 import TaskCard from "../components/dashboard-comps/TaskCard";
@@ -11,21 +11,20 @@ import CreateProjectModal from "../components/CreateProjectModal";
 import CreateTaskModal from "../components/CreateTaskModal";
 
 export default function DashboardPage() {
-  const { projects, setProjects } = useProjects();
+  // 1. Destructure fetchAllProjects
+  const { projects, fetchAllProjects } = useProjects(); 
   const { tasks } = useTasks();
   const { teams } = useTeams();
 
-  const { triggerPageLoading, searchQuery } = useUI();
+  const { triggerPageLoading } = useUI(); // Removed searchQuery if not needed for projects
 
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
 
-  const filteredProjects = projects.filter((p) =>
-    [p.name, p.team?.name]
-      .join(" ")
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase()),
-  );
+  // 2. Fetch all projects when the dashboard mounts
+  useEffect(() => {
+    fetchAllProjects();
+  }, []);
 
   return (
     <DashboardLayout>
@@ -36,6 +35,7 @@ export default function DashboardPage() {
         teams={teams}
         onSuccess={() => {
           triggerPageLoading();
+          fetchAllProjects(); // Refresh all projects after creation
         }}
       />
 
@@ -49,47 +49,52 @@ export default function DashboardPage() {
         }}
       />
 
-      {/* Projects */}
+      {/* Projects Section */}
       <div className="mb-10">
         <div className="flex justify-between items-center m-6">
-          <h2 className="text-2xl font-bold text-white">Projects</h2>
+          <h2 className="text-2xl font-bold text-white">All Projects</h2>
 
           <button
             onClick={() => setShowProjectModal(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm shadow-md"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm shadow-md transition-colors"
           >
             + New Project
           </button>
         </div>
 
+        {/* 3. Map directly over 'projects' instead of 'filteredProjects' */}
         <div className="grid md:grid-cols-3 gap-5">
-          {filteredProjects.length === 0 ? (
-            <p className="text-gray-400 ml-6">No projects found!</p>
+          {projects.length === 0 ? (
+            <p className="text-gray-400 ml-6">No projects found in the database.</p>
           ) : (
-            filteredProjects.map((p) => <ProjectCard key={p._id} project={p} />)
+            projects.map((p) => <ProjectCard key={p._id} project={p} />)
           )}
         </div>
       </div>
 
-      <div className="w-full h-px bg-cyan-500 my-6"></div>
+      <div className="w-full h-px bg-cyan-500 my-6 opacity-30"></div>
 
-      {/* Tasks */}
+      {/* Tasks Section */}
       <div>
         <div className="flex justify-between items-center m-6">
           <h2 className="text-2xl font-bold text-white">My Tasks</h2>
 
           <button
             onClick={() => setShowTaskModal(true)}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm shadow-md"
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm shadow-md transition-colors"
           >
             + New Task
           </button>
         </div>
 
         <div className="grid md:grid-cols-3 gap-5">
-          {tasks?.map((t) => (
-            <TaskCard key={t._id} task={t} />
-          ))}
+          {tasks?.length === 0 ? (
+            <p className="text-gray-400 ml-6">No tasks assigned to you.</p>
+          ) : (
+            tasks?.map((t) => (
+              <TaskCard key={t._id} task={t} />
+            ))
+          )}
         </div>
       </div>
     </DashboardLayout>
