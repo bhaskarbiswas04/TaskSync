@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.route("/").post(isAuthenticated, createProject)
 router.route("/").get(isAuthenticated, getProjects);
-router.route("/all-projects").get(isAuthenticated, getAllProjects);
+router.route("/all").get(isAuthenticated, getAllProjects);
 
 export default router;
