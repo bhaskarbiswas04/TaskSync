@@ -43,3 +43,25 @@ export const getProjects = async (req, res) => {
     });
   }
 };
+
+//--RouteLogic: GET- Fetch all projects in the database
+export const getAllProjects = async (req, res) => {
+  try {
+    // Passing an empty object {} to .find() retrieves every document in the collection
+    const projects = await Project.find({})
+      .populate("createdBy", "name email")
+      .sort({ createdAt: -1 });
+
+    // Handle case where no projects exist
+    if (!projects || projects.length === 0) {
+      return res.status(404).json({ message: "No projects found in the database" });
+    }
+
+    return res.status(200).json(projects);
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error fetching all projects",
+      error: error.message
+    });
+  }
+};
