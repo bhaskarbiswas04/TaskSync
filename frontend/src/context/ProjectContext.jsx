@@ -11,18 +11,18 @@ export const ProjectProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   // Fetch only user-specific projects
-  const fetchProjects = async () => {
-    if (!user?._id) return;
-    try {
-      setLoading(true);
-      const data = await getProjects();
-      setProjects(data);
-    } catch (err) {
-      toast.error("Failed to load your projects");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchProjects = async () => {
+  //   if (!user?._id) return;
+  //   try {
+  //     setLoading(true);
+  //     const data = await getProjects();
+  //     setProjects(data);
+  //   } catch (err) {
+  //     toast.error("Failed to load your projects");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   // NEW: Fetch all projects across the platform
   const fetchAllProjects = async () => {

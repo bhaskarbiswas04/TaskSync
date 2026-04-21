@@ -19,7 +19,7 @@ export default function DashboardPage() {
   const { triggerPageLoading } = useUI(); // Removed searchQuery if not needed for projects
 
   const [showProjectModal, setShowProjectModal] = useState(false);
-  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [showTaskModal, setShowTaskModal] = useState(false); 
 
   // 2. Fetch all projects when the dashboard mounts
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function DashboardPage() {
         teams={teams}
         onSuccess={() => {
           triggerPageLoading();
-          fetchAllProjects(); // Refresh all projects after creation
+          fetchAllProjects();
         }}
       />
 
@@ -62,7 +62,6 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        {/* 3. Map directly over 'projects' instead of 'filteredProjects' */}
         <div className="grid md:grid-cols-3 gap-5">
           {projects.length === 0 ? (
             <p className="text-gray-400 ml-6">No projects found in the database.</p>
