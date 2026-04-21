@@ -7,8 +7,8 @@ export const createProject = async (req, res) => {
     const { name, description, team } = req.body;
 
     //-Validations
-    if (!name || !team) {
-      return res.status(400).json({ message: "Provide Project Name and Team" });
+    if (!name) {
+      return res.status(400).json({ message: "Provide Project Name" });
     }
 
     const project = await Project.create({
