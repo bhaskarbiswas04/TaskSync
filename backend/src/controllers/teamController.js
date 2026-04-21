@@ -88,7 +88,7 @@ export const addMembersToTeam = async (req, res) => {
       });
     }
 
-    // 🔥 FIX: convert ObjectId → string
+    //convets objectId to string.
     const existingMembers = team.members.map((m) => m.toString());
 
     const uniqueMembers = members.filter((m) => !existingMembers.includes(m));

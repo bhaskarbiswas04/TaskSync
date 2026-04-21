@@ -107,7 +107,7 @@ export const updateTaskById = async (req, res)=>{
 
         await task.save();
 
-        // 🔥 POPULATE UPDATED TASK
+        // POPULATE UPDATED TASK
         const populatedTask = await Task.findById(task._id)
           .populate("owners", "name email")
           .populate("project", "name")
