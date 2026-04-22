@@ -21,7 +21,7 @@ export default function Topbar() {
   };
 
   return (
-    <div className="h-16 bg-white/5 backdrop-blur-lg border-b border-white/10 flex items-center justify-between px-6">
+    <div className="h-16 bg-white/5 backdrop-blur-lg border-b border-white/10 flex items-center justify-between p-6">
       <div className="w-1/3">
         {shouldShowSearch ? (
           <input

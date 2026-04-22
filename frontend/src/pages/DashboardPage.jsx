@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"; // Added useEffect
+import { useState, useEffect, useMemo } from "react"; // Added useMemo for performance
 import DashboardLayout from "../layouts/DashboardLayout";
 import ProjectCard from "../components/dashboard-comps/ProjectCard";
 import TaskCard from "../components/dashboard-comps/TaskCard";
@@ -11,20 +11,26 @@ import CreateProjectModal from "../components/CreateProjectModal";
 import CreateTaskModal from "../components/CreateTaskModal";
 
 export default function DashboardPage() {
-  // 1. Destructure fetchAllProjects
   const { projects, fetchAllProjects } = useProjects(); 
   const { tasks } = useTasks();
   const { teams } = useTeams();
 
-  const { triggerPageLoading } = useUI(); // Removed searchQuery if not needed for projects
+  const { triggerPageLoading, searchQuery } = useUI(); 
 
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false); 
 
-  // 2. Fetch all projects when the dashboard mounts
   useEffect(() => {
     fetchAllProjects();
   }, []);
+
+  // We use useMemo so the filter only runs when 'projects' or 'searchQuery' changes
+  const filteredProjects = useMemo(() => {
+    return projects.filter((p) => {
+      const searchContent = `${p.name} ${p.description || ""} ${p.team?.name || ""}`.toLowerCase();
+      return searchContent.includes(searchQuery.toLowerCase());
+    });
+  }, [projects, searchQuery]);
 
   return (
     <DashboardLayout>
@@ -63,10 +69,13 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-5">
-          {projects.length === 0 ? (
-            <p className="text-gray-400 ml-6">No projects found in the database.</p>
+          {/* 3. Use filteredProjects here instead of raw projects */}
+          {filteredProjects.length === 0 ? (
+            <p className="text-gray-400 ml-6">
+              {searchQuery ? `No projects match "${searchQuery}"` : "No projects found in the database."}
+            </p>
           ) : (
-            projects.map((p) => <ProjectCard key={p._id} project={p} />)
+            filteredProjects.map((p) => <ProjectCard key={p._id} project={p} />)
           )}
         </div>
       </div>
