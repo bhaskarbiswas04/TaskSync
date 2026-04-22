@@ -72,7 +72,7 @@ export default function DashboardPage() {
           {/* 3. Use filteredProjects here instead of raw projects */}
           {filteredProjects.length === 0 ? (
             <p className="text-gray-400 ml-6">
-              {searchQuery ? `No projects match "${searchQuery}"` : "No projects found in the database."}
+              {searchQuery ? `No projects match "${searchQuery}"` : "No projects found."}
             </p>
           ) : (
             filteredProjects.map((p) => <ProjectCard key={p._id} project={p} />)
