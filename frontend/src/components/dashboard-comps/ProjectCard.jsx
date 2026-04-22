@@ -10,7 +10,7 @@ export default function ProjectCard({ project }) {
     >
       <h3 className="text-lg font-semibold mt-2 text-white">{project.name}</h3>
 
-      <p className="text-sm text-cyan-400 mt-1">Description: {project.description}</p>
+      <p className="text-sm text-cyan-400 mt-1">Description: {project.description ? project.description : "N/A"}</p>
 
       {/* SAFE TEAM DISPLAY */}
       {/* <p className="text-sm text-cyan-400 mt-1">
