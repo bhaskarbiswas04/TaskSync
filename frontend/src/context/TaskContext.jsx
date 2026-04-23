@@ -5,11 +5,11 @@ import {
   updateTask as updateTaskAPI,
   deleteTask as deleteTaskAPI,
 } from "../api/tasksApi";
-import { useAuth } from "./AuthContext";
-import { useReports } from "./ReportContext";
-import { useProjects } from "./ProjectContext";
-import { useTeams } from "./TeamContext";
-import toast from "react-hot-toast";
+import { useAuth } from "./AuthContext"; 
+import { useReports } from "./ReportContext"; 
+import { useProjects } from "./ProjectContext"; 
+import { useTeams } from "./TeamContext"; 
+import toast from "react-hot-toast"; 
 
 const TaskContext = createContext(); 
 
