@@ -11,7 +11,7 @@ import { useProjects } from "./ProjectContext";
 import { useTeams } from "./TeamContext";
 import toast from "react-hot-toast";
 
-const TaskContext = createContext();
+const TaskContext = createContext(); 
 
 export const TaskProvider = ({ children }) => {
   const { user } = useAuth();
