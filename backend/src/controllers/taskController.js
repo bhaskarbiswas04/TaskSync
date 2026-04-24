@@ -151,3 +151,21 @@ export const deleteTask = async (req, res)=>{
         });
     }
 }
+
+//--RouteLogic: Get tasks by Id :
+export const getTaskById = async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id)
+      .populate("owners", "name email")
+      .populate("project", "name")
+      .populate("team", "name");
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    res.json(task);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching task" });
+  }
+};
