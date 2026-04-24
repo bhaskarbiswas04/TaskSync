@@ -4,7 +4,7 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import { useState, useEffect } from "react";
 import { useUI } from "../context/UIContext";
 import toast from "react-hot-toast";
-import EditTaskModal from "../components/EditTaskModal"; // ✅ NEW
+import EditTaskModal from "../components/EditTaskModal";
 
 export default function TaskViewPage() {
   const { taskId } = useParams();
@@ -13,16 +13,16 @@ export default function TaskViewPage() {
   const { tasks, updateTask, deleteTask } = useTasks();
   const { triggerPageLoading } = useUI();
 
-  const [showEditModal, setShowEditModal] = useState(false); // ✅ NEW
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const task = tasks.find((t) => t._id === taskId);
 
-  // 🔥 loader
+  // loader
   useEffect(() => {
     triggerPageLoading(400);
   }, []);
 
-  // 🔥 find task
+  // find task
   useEffect(() => {
     const found = tasks.find((t) => t._id === taskId);
 
@@ -57,17 +57,17 @@ export default function TaskViewPage() {
     }
   };
 
- const handleStatusChange = async (newStatus) => {
-   try {
-     await updateTask(task._id, {
-       status: newStatus,
-     });
+  const handleStatusChange = async (newStatus) => {
+    try {
+      await updateTask(task._id, {
+        status: newStatus,
+      });
 
-     toast.success("Task updated");
-   } catch {
-     toast.error("Failed to update task");
-   }
- };
+      toast.success("Task updated");
+    } catch {
+      toast.error("Failed to update task");
+    }
+  };
 
   return (
     <DashboardLayout>
@@ -96,7 +96,7 @@ export default function TaskViewPage() {
 
             <button
               onClick={handleDelete}
-              className="bg-red-400 hover:bg-red-500 px-4 py-2 rounded text-sm cursor-pointer text-black" 
+              className="bg-red-400 hover:bg-red-500 px-4 py-2 rounded text-sm cursor-pointer text-black"
             >
               Delete Task
             </button>

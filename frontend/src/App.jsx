@@ -12,6 +12,7 @@ import TaskViewPage from "./pages/TaskViewPage";
 import ReportsPage from "./pages/ReportsPage";
 import SettingsPage from "./pages/SettingsPage";
 import LandingPage from "./pages/LandingPage";
+import TasksPage from "./pages/TasksPage";
 
 import { UIProvider, useUI } from "./context/UIContext";
 import { AuthProvider } from "./context/AuthContext";
@@ -99,6 +100,17 @@ function AppContent() {
             <ProtectedRoute>
               <AppProviders>
                 <TeamViewPage />
+              </AppProviders>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tasks"
+          element={
+            <ProtectedRoute>
+              <AppProviders>
+                <TasksPage />
               </AppProviders>
             </ProtectedRoute>
           }

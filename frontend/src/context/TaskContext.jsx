@@ -23,6 +23,10 @@ export const TaskProvider = ({ children }) => {
 
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [allTasks, setAllTasks] = useState([]);
+  const [allTasksLoading, setAllTasksLoading] = useState(false);
+
   const [lastFetched, setLastFetched] = useState(null);
 
   const fetchTasks = async (force = false) => {
@@ -48,16 +52,29 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  // =========================
-  // 🔥 CREATE TASK
-  // =========================
+  const fetchAllTasks = async (force = false) => {
+    try {
+      setAllTasksLoading(true);
+
+      const data = await getTasks(); // 🚀 NO FILTER
+
+      setAllTasks(data);
+    } catch (err) {
+      console.log(err);
+      toast.error("Failed to fetch all tasks");
+    } finally {
+      setAllTasksLoading(false);
+    }
+  };
+
+  // CREATE TASK
   const createTask = async (payload) => {
     try {
       const data = await createTaskAPI(payload);
 
       const rawTask = data.task;
 
-      // 🔥 NORMALIZATION
+      // NORMALIZATION
       const selectedTeam =
         typeof rawTask.team === "object"
           ? rawTask.team
@@ -81,8 +98,9 @@ export const TaskProvider = ({ children }) => {
         owners: selectedOwners,
       };
 
-      // 🔥 UPDATE STATE
+      // UPDATE STATE
       setTasks((prev) => [newTask, ...prev]);
+      setAllTasks((prev) => [newTask, ...prev]);
 
       fetchReports?.();
 
@@ -96,7 +114,6 @@ export const TaskProvider = ({ children }) => {
   // UPDATE TASK STATUS
   const updateTask = async (taskId, payload) => {
     try {
-      // ✅ BUILD CLEAN PAYLOAD
       const cleanPayload = {};
 
       if (payload.name !== undefined) {
@@ -146,6 +163,9 @@ export const TaskProvider = ({ children }) => {
 
       // ✅ UPDATE STATE
       setTasks((prev) => prev.map((t) => (t._id === taskId ? updatedTask : t)));
+      setAllTasks((prev) =>
+        prev.map((t) => (t._id === taskId ? updatedTask : t)),
+      );
 
       fetchReports?.();
 
@@ -157,14 +177,13 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  // =========================
   // 🔥 DELETE TASK
-  // =========================
   const deleteTask = async (taskId) => {
     try {
       await deleteTaskAPI(taskId);
 
       setTasks((prev) => prev.filter((t) => t._id !== taskId));
+      setAllTasks((prev) => prev.filter((t) => t._id !== taskId)); 
 
       fetchReports?.();
 
@@ -174,9 +193,7 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  // =========================
   // AUTO FETCH
-  // =========================
   useEffect(() => {
     if (user?._id) {
       fetchTasks();
@@ -187,8 +204,11 @@ export const TaskProvider = ({ children }) => {
     <TaskContext.Provider
       value={{
         tasks,
+        allTasks,
         loading,
+        allTasksLoading,
         fetchTasks,
+        fetchAllTasks,
         createTask,
         updateTask,
         deleteTask,

@@ -1,5 +1,11 @@
 import API_BASE_URL from "./axios";
 
+//GET TASKS BY ID
+export const getTaskById = async (taskId) => {
+  const res = await API_BASE_URL.get(`/tasks/${taskId}`);
+  return res.data;
+};
+
 // GET TASKS
 export const getTasks = async (filters = {}) => {
   const query = new URLSearchParams(filters).toString();

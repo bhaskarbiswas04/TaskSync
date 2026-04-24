@@ -9,6 +9,7 @@ export default function Sidebar() {
   const menuItems = [
     { name: "Dashboard", path: "/dashboard" },
     { name: "Projects", path: "/projects" },
+    { name: "Tasks", path: "/tasks" },
     { name: "Teams", path: "/teams" },
     { name: "Reports", path: "/reports" },
     { name: "Settings", path: "/settings" },
