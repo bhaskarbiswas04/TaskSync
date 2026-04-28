@@ -4,7 +4,7 @@ TaskSync is a full-featured project and task management application built using 
 
 ---
 
-## 🌐 Experience the Application Live:  https://task-sync-client.vercel.app
+## 🌐 Experience the Application Live:  [TaskSync](https://task-sync-client.vercel.app)
 
 ---
 
