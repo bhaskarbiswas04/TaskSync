@@ -14,4 +14,4 @@ export const changePassword = (data) => API_BASE_URL.post("/settings/password", 
 export const updatePreferences = (data) =>
   API_BASE_URL.post("/settings/preferences", data);
 
-export const deleteAccount = () => API_BASE_URL.delete("/settings/delete");
+export const deleteAccount = () => API_BASE_URL.delete("/settings/delete"); 
